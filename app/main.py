@@ -152,3 +152,8 @@ async def reserve_tickets(response: TicketRequest):
 '''@app.on_event("startup")
 async def startup_event():
     await insert_initial_data()'''
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
