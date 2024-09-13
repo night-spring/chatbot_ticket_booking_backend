@@ -22,8 +22,13 @@ app.add_middleware(
 
 # Earnings Model and Collection
 @app.middleware("http")
-async def custom_middleware(request, call_next):
+async def add_process_time_header(request: Request, call_next):
+    await init_db() # already in the previous snippet
+
     response = await call_next(request)
+
+    await Tortoise.close_connections() # Now also close the session after each call
+
     return response
 
 @app.get("/")
