@@ -4,8 +4,6 @@ import pytz
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, HTTPException, Query
 from typing import List
-from database import tickets_collection, earnings_collection, profit_collection, shows_collections, payment_collection
-from model import Earnings, Tickets, ResolutionTime, Shows, TicketUpdate, PaymentDetails, TicketRequest
 #from insert import insert_initial_data
 # FastAPI app setup
 app = FastAPI()
@@ -34,7 +32,52 @@ shows_collections = database["shows"]
 payment_collection = database["payments"]
 
 
+from bson import ObjectId
+from pydantic import BaseModel, EmailStr
 
+
+class Earnings(BaseModel):
+    productSales: int
+    subscriptionFees: int
+    serviceCharges: int
+    miscellaneous: int
+
+
+# Tickets Model and Collection
+class Tickets(BaseModel):
+    name: str
+    tickets: int
+    resolutionTime: int
+
+
+# Resolution Time Model and Collection
+class ResolutionTime(BaseModel):
+    name: str
+    earning: int
+    cost: int
+    profit: int
+
+
+class Shows(BaseModel):
+    image: str
+    title: str
+    date: str
+    location: str
+    price: str
+    ticketsLeft: int
+    id: str
+
+
+class TicketUpdate(BaseModel):
+    eventId: str
+    ticketsBought: int
+
+class PaymentDetails(BaseModel):
+    email: EmailStr
+    phone: str
+
+class TicketRequest(BaseModel):
+    queryResult: dict
 
 
 
