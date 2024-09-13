@@ -10,6 +10,34 @@ from model import Earnings, Tickets, ResolutionTime, Shows, TicketUpdate, Paymen
 # FastAPI app setup
 app = FastAPI()
 
+#DATABASE
+from motor.motor_asyncio import AsyncIOMotorClient
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# MongoDB connection setup
+MONGODB_URI = os.getenv("MONGODB_URI")
+if not MONGODB_URI:
+    raise Exception("MONGODB_URI not found in environment variables.")
+
+client = AsyncIOMotorClient(MONGODB_URI)
+database = client["Ticketing"]
+
+# Define collections
+tickets_collection = database["tickets"]
+earnings_collection = database["earnings"]
+profit_collection = database["profit"]
+shows_collections = database["shows"]
+payment_collection = database["payments"]
+
+
+
+
+
+
 # CORS setup to allow React frontend
 # noinspection PyTypeChecker
 app.add_middleware(
