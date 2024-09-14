@@ -265,7 +265,7 @@ async def webhook(request: Request):
                     fulfillment_text = "I didn't understand."
                     response = {"fulfillmentText": fulfillment_text}
 
-                return response
+                return json.dumps(response, ensure_ascii=False)
             
             except Exception as e:
                 # Log and return the error message
