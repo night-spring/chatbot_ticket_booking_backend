@@ -159,29 +159,29 @@ async def reserve_tickets(response: TicketRequest):
 
 @app.post("/webhook")
 async def webhook(request: Request, body: DialogflowRequest):
-    # Extract the intent name
     intent_name = body.queryResult.get("intent", {}).get("displayName")
-
-    # Logic for handling 'ReserveTicket' intent
     if intent_name == "ReserveTicket":
         parameters = body.queryResult.get("parameters", {})
-        number_of_tickets = parameters.get("number_of_tickets")
-        show_time = parameters.get("show_time")
-        show_name = parameters.get("show_name")
+        ticket = parameters.get("ticket")
+        email = parameters.get("email")
+        ticket_type = parameters.get("ticket_type")
+        ticket_cost = 20
+        total_cost = ticket * ticket_cost
 
-        fulfillment_text = (f"Webhook received! You requested {number_of_tickets} tickets "
-                            f"for the show '{show_name}' at {show_time}.")
+        fulfillment_text = (f"Webhook received! You requested {ticket} tickets "
+                            f"for the show '{ticket_type}' and your total is {total_cost}.")
 
-    # Logic for handling 'Text_ticket' intent
+    
     elif intent_name == "Text_ticket":
         parameters = body.queryResult.get("parameters", {})
         ticket = parameters.get("ticket")
+        ticket_cost = 20
+        total_cost = ticket * ticket_cost
 
-        fulfillment_text = f"Webhook received! You requested ticket information: {ticket}."
-
-    # Default fallback if intent is not recognized
+        fulfillment_text = f"your total is {total_cost}, proceed for payment."
+        #payment()
     else:
-        fulfillment_text = "Webhook received, but intent not recognized."
+        fulfillment_text = "I didnt understand"
 
     # Return the fulfillment response to Dialogflow
     return {
