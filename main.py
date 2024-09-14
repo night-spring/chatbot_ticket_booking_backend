@@ -158,44 +158,38 @@ async def reserve_tickets(response: TicketRequest):
 
 
 @app.post("/webhook")
-async def webhook(request: Request, body: DialogflowRequest):
-    intent_name = body.queryResult.get("intent", {}).get("displayName")
+async def webhook(request: Request):
+
+    try:
+        body = await request.json()
+        print(json.dumps(body, indent=4))  # Log the request body for debugging
+    except Exception as e:
+        return {
+            "fulfillmentText": f"Error parsing request: {str(e)}"
+        }
+
+    intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
     if intent_name == "ReserveTicket":
-        parameters = body.queryResult.get("parameters", {})
-        ticket = parameters.get("ticket")
+        parameters = body.get("queryResult", {}).get("parameters", {})
+        ticket = int(parameters.get("ticket", 0))  # Convert to int if it's a string
         email = parameters.get("email")
         ticket_type = parameters.get("ticket_type")
         ticket_cost = 20
         total_cost = ticket * ticket_cost
-
         fulfillment_text = (f"Webhook received! You requested {ticket} tickets "
                             f"for the show '{ticket_type}' and your total is {total_cost}.")
-
-    
     elif intent_name == "Text_ticket":
-        parameters = body.queryResult.get("parameters", {})
-        ticket = parameters.get("Ticket")
+        parameters = body.get("queryResult", {}).get("parameters", {})
+        ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
         ticket_cost = 20
         total_cost = ticket * ticket_cost
 
-        fulfillment_text = f"your total is {total_cost}, proceed for payment."
-        #payment()
+        fulfillment_text = f"Your total is {total_cost}, proceed for payment."
+    
+    
     else:
-        fulfillment_text = "I didnt understand"
+        fulfillment_text = "I didn't understand your request."
 
-    # Return the fulfillment response to Dialogflow
     return {
         "fulfillmentText": fulfillment_text
     }
-
-
-
-
-
-
-
-
-# Call the data insertion function on startup
-'''@app.on_event("startup")
-async def startup_event():
-    await insert_initial_data()'''
