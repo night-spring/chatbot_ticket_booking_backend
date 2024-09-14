@@ -164,25 +164,16 @@ async def webhook(request: Request):
 
         intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
 
-        if intent_name == "Language":
-            # Get the selected language from parameters
-            language = body.get("queryResult", {}).get("parameters", {}).get("language_name", "")
-            # Default response message
-            response_message = "How may I help you?"
-            
-            # Translate response based on selected language
-            if language == "hindi":
-                response_message = "मैं आपकी किस प्रकार मदद कर सकता हूँ?"
-            elif language == "marathi":
-                response_message = "मी आपल्याला कशी मदत करू शकतो?"
-            elif language == "bengali":
-                response_message = "আমি কিভাবে সাহায্য করতে পারি?"
-            elif language == "tamil":
-                response_message = "நான் உங்களுக்கு எப்படி உதவ முடியும்?"
-            elif language == "telugu":
-                response_message = "నేను మీకు ఎలా సహాయపడగలను?"
-
-            response = {"fulfillmentText": response_message}
+        if intent_name == "hindi":
+            response = {"fulfillmentText": "मैं आपकी किस प्रकार मदद कर सकता हूँ?"}
+        elif intent_name == "marathi":
+            response = {"fulfillmentText": "मी आपल्याला कशी मदत करू शकतो?"}
+        elif intent_name == "bengali":
+            response = {"fulfillmentText": "আমি কিভাবে সাহায্য করতে পারি?"}
+        elif intent_name == "tamil":
+            response = {"fulfillmentText": "நான் உங்களுக்கு எப்படி உதவ முடியும்?"}
+        elif intent_name == "telugu":
+            response = {"fulfillmentText": "నేను మీకు ఎలా సహాయపడగలను?"}
         
         elif intent_name == "ReserveTickets":
             parameters = body.get("queryResult", {}).get("parameters", {})
