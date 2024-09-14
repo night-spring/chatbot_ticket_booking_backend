@@ -180,19 +180,32 @@ async def webhook(request: Request):
         }
         elif intent_name == "marathi":
             response = {
-                "fulfillmentText": "मी आपल्याला कशी मदत करू शकतो?",
-                "richContent": [
-                    [
-                        {
-                            "type": "chips",
-                            "options": [
-                                {"text": "test"},
-                                {"text": "भाषा"}
-                            ]
-                        }
-                    ]
-                ]
+  "fulfillmentMessages": [
+    {
+      "text": {
+        "text": [
+          "मैं आपकी किस प्रकार मदद कर सकता हूँ?"
+        ]
+      }
+    },
+    {
+      "payload": {
+        "richContent": [
+          [
+            {
+              "type": "chips",
+              "options": [
+                {"text": "उपलब्ध टिकट"},
+                {"text": "भाषा"}
+              ]
             }
+          ]
+        ]
+      }
+    }
+  ]
+}
+
         elif intent_name == "bengali":
             response = {
                 "fulfillmentText": "আমি কিভাবে সাহায্য করতে পারি?",
