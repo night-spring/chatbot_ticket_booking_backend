@@ -1,6 +1,6 @@
 from bson import ObjectId
 from pydantic import BaseModel, EmailStr
-
+from typing import Dict, Optional, Any
 
 class Earnings(BaseModel):
     productSales: int
@@ -44,3 +44,11 @@ class PaymentDetails(BaseModel):
 
 class TicketRequest(BaseModel):
     queryResult: dict
+
+# Define the structure of the Dialogflow request
+class QueryResult(BaseModel):
+    parameters: Dict[str, Any]
+    intent: Dict[str, str]
+
+class DialogflowRequest(BaseModel):
+    queryResult: QueryResult
