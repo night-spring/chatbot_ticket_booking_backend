@@ -164,20 +164,20 @@ async def webhook(request: Request):
 
         intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")      
         if intent_name == "hindi":
-        response = {
-        "fulfillmentText": "मैं आपकी किस प्रकार मदद कर सकता हूँ?",
-        "richContent": [
-            [
-                {
-                    "type": "chips",
-                    "options": [
-                        {"text": "उपलब्ध टिकट"},
-                        {"text": "भाषा"}
-                    ]
-                }
+            response = {
+            "fulfillmentText": "मैं आपकी किस प्रकार मदद कर सकता हूँ?",
+            "richContent": [
+                [
+                    {
+                        "type": "chips",
+                        "options": [
+                            {"text": "उपलब्ध टिकट"},
+                            {"text": "भाषा"}
+                        ]
+                    }
+                ]
             ]
-        ]
-    }
+        }
         elif intent_name == "marathi":
             response = {
                 "fulfillmentText": "मी आपल्याला कशी मदत करू शकतो?",
@@ -239,37 +239,33 @@ async def webhook(request: Request):
                 ]
             }
 
-                
-                
-                
-                
-                elif intent_name == "ReserveTickets":
-                    parameters = body.get("queryResult", {}).get("parameters", {})
-                    ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
-                    email = parameters.get("email")
-                    ticket_type = parameters.get("ticket_type")
-                    ticket_cost = 20
-                    total_cost = ticket * ticket_cost
-                    fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment. your tickets will be mailed to you @{email}" 
-                    response = {"fulfillmentText": fulfillment_text}
-                
-                elif intent_name == "Text_tickets":
-                    parameters = body.get("queryResult", {}).get("parameters", {})
-                    ticket = int(parameters.get("Ticket", 0)) 
-                    ticket_cost = 20
-                    total_cost = ticket * ticket_cost
-                    fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment."
-                    response = {"fulfillmentText": fulfillment_text}
-                
-                else:
-                    fulfillment_text = "I didn't understand."
-                    response = {"fulfillmentText": fulfillment_text}
+        elif intent_name == "ReserveTickets":
+            parameters = body.get("queryResult", {}).get("parameters", {})
+            ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
+            email = parameters.get("email")
+            ticket_type = parameters.get("ticket_type")
+            ticket_cost = 20
+            total_cost = ticket * ticket_cost
+            fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment. your tickets will be mailed to you @{email}" 
+            response = {"fulfillmentText": fulfillment_text}
+        
+        elif intent_name == "Text_tickets":
+            parameters = body.get("queryResult", {}).get("parameters", {})
+            ticket = int(parameters.get("Ticket", 0)) 
+            ticket_cost = 20
+            total_cost = ticket * ticket_cost
+            fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment."
+            response = {"fulfillmentText": fulfillment_text}
+        
+        else:
+            fulfillment_text = "I didn't understand."
+            response = {"fulfillmentText": fulfillment_text}
 
-                return json.dumps(response, ensure_ascii=False)
-            
-            except Exception as e:
-                # Log and return the error message
-                print(f"Error: {e}")
-                return {
-                    "fulfillmentText": f"Webhook error: {str(e)}"
-                }
+        return json.dumps(response, ensure_ascii=False)
+    
+    except Exception as e:
+        # Log and return the error message
+        print(f"Error: {e}")
+        return {
+            "fulfillmentText": f"Webhook error: {str(e)}"
+        }
