@@ -166,7 +166,7 @@ async def webhook(request: Request):
 
         if intent_name == "Language":
             # Get the selected language from parameters
-            language = body.get("queryResult", {}).get("parameters", {}).get("language", "").lower()
+            language = body.get("queryResult", {}).get("parameters", {}).get("language_name", "")
             # Default response message
             response_message = "How may I help you?"
             
