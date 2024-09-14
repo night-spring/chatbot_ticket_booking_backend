@@ -164,14 +164,102 @@ async def webhook(request: Request):
 
         intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
 
-        if intent_name == "ReserveTickets":
+        if intent_name == "Language":
+            parameters = body.get("queryResult", {}).get("parameters", {})
+            lang=parameters.get("language_name")
+            if lang == "hindi":
+                response = {
+                "fulfillmentMessages": [
+                    {
+                        "payload": {
+                            "richContent": [
+                                [
+                                    {
+                                        "subtitle": "Access to the museum\n₹20 per person",
+                                        "type": "list",
+                                        "event": {
+                                            "name": "ReserveTickets",
+                                            "parameters": {
+                                                "ticket_type": "General Entry"
+                                            }
+                                        },
+                                        "title": "General Entry"
+                                    },
+                                    {
+                                        "type": "divider"
+                                    },
+                                    {
+                                        "title": "Timeless Treasures",
+                                        "subtitle": "Exhibition of historical artifacts\n₹50 per person",
+                                        "type": "list",
+                                        "event": {
+                                            "parameters": {
+                                                "ticket_type": "Timeless Treasures"
+                                            },
+                                            "name": "ReserveTickets"
+                                        }
+                                    },
+                                    {
+                                        "type": "divider"
+                                    },
+                                    {
+                                        "event": {
+                                            "parameters": {
+                                                "ticket_type": "Art Through the Ages"
+                                            },
+                                            "name": "ReserveTickets"
+                                        },
+                                        "title": "Art Through the Ages",
+                                        "subtitle": "Evolution of art from different eras\n₹50 per person",
+                                        "type": "list"
+                                    },
+                                    {
+                                        "type": "divider"
+                                    },
+                                    {
+                                        "type": "list",
+                                        "subtitle": "Uncover hidden stories from the past\n₹50 per person",
+                                        "title": "Stories Untold",
+                                        "event": {
+                                            "parameters": {
+                                                "ticket_type": "Stories Untold"
+                                            },
+                                            "name": "ReserveTickets"
+                                        }
+                                    },
+                                    {
+                                        "type": "divider"
+                                    },
+                                    {
+                                        "subtitle": "Showcasing modernism\n₹50 per person",
+                                        "title": "Modern Maestro",
+                                        "event": {
+                                            "name": "ReserveTickets",
+                                            "parameters": {
+                                                "ticket_type": "Modern Maestro"
+                                            }
+                                        },
+                                        "type": "list"
+                                    }
+                                ]
+                            ]
+                        },
+                        "platform": "ACTIONS_ON_GOOGLE",
+                        "type": "custom_payload"
+                    }
+                ]
+            }
+                
+        elif intent_name == "ReserveTickets":
             parameters = body.get("queryResult", {}).get("parameters", {})
             ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
             email = parameters.get("email")
             ticket_type = parameters.get("ticket_type")
             ticket_cost = 20
             total_cost = ticket * ticket_cost
-            fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment."       
+            fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment. your tickets will be mailed to you @{email}" 
+            response = {"fulfillmentText": fulfillment_text}
+                  
         
         elif intent_name == "Text_tickets":
             parameters = body.get("queryResult", {}).get("parameters", {})
@@ -179,13 +267,13 @@ async def webhook(request: Request):
             ticket_cost = 20
             total_cost = ticket * ticket_cost
             fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment."
-        
+            response = {"fulfillmentText": fulfillment_text}
+            
         else:
             fulfillment_text = "I didn't understand."
+            response = {"fulfillmentText": fulfillment_text}
 
-        return {
-            "fulfillmentText": fulfillment_text
-        }
+        return response
     
     except Exception as e:
         # Log and return the error message
