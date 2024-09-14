@@ -165,21 +165,6 @@ async def webhook(request: Request):
         intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")      
         if intent_name == "hindi":
             response = {
-            "fulfillmentText": "मैं आपकी किस प्रकार मदद कर सकता हूँ?",
-            "richContent": [
-                [
-                    {
-                        "type": "chips",
-                        "options": [
-                            {"text": "उपलब्ध टिकट"},
-                            {"text": "भाषा"}
-                        ]
-                    }
-                ]
-            ]
-        }
-        elif intent_name == "marathi":
-            response = {
   "fulfillmentMessages": [
     {
       "text": {
@@ -206,49 +191,114 @@ async def webhook(request: Request):
   ]
 }
 
+        elif intent_name == "marathi":
+            response = {
+  "fulfillmentMessages": [
+    {
+      "text": {
+        "text": [
+          "मी तुम्हाला कसे मदत करू शकतो?"
+        ]
+      }
+    },
+    {
+      "payload": {
+        "richContent": [
+          [
+            {
+              "type": "chips",
+              "options": [
+                {"text": "उपलब्ध तिकिटे"},
+                {"text": "भाषा"}
+              ]
+            }
+          ]
+        ]
+      }
+    }
+  ]
+}
+
         elif intent_name == "bengali":
             response = {
-                "fulfillmentText": "আমি কিভাবে সাহায্য করতে পারি?",
-                "richContent": [
-                    [
-                        {
-                            "type": "chips",
-                            "options": [
-                                {"text": "test 1"},
-                                {"text": "language"}
-                            ]
-                        }
-                    ]
-                ]
+  "fulfillmentMessages": [
+    {
+      "text": {
+        "text": [
+          "কিভাবে আমি আপনাকে সাহায্য করতে পারি?"
+        ]
+      }
+    },
+    {
+      "payload": {
+        "richContent": [
+          [
+            {
+              "type": "chips",
+              "options": [
+                {"text": "প্রাপ্তব্য টিকেট"},
+                {"text": "ভাষা"}
+              ]
             }
+          ]
+        ]
+      }
+    }
+  ]
+}
+
         elif intent_name == "tamil":
             response = {
-                "fulfillmentText": "நான் உங்களுக்கு எப்படி உதவ முடியும்?",
-                "richContent": [
-                    [
-                        {
-                            "type": "chips",
-                            "options": [
-                                {"text": "கிடைக்கக்கூடிய டிக்கெட்டுகள்"},
-                                {"text": "மொழி"}
+                "fulfillmentMessages": [
+                    {
+                        "text": {
+                            "text": [
+                                "நான் உங்களுக்கு எப்படி உதவ முடியும்?"
                             ]
                         }
-                    ]
+                    },
+                    {
+                        "payload": {
+                            "richContent": [
+                                [
+                                    {
+                                        "type": "chips",
+                                        "options": [
+                                            {"text": "கிடைக்கக்கூடிய டிக்கெட்டுகள்"},
+                                            {"text": "மொழி"}
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    }
                 ]
             }
         elif intent_name == "telugu":
             response = {
-                "fulfillmentText": "నేను మీకు ఎలా సహాయపడగలను?",
-                "richContent": [
-                    [
-                        {
-                            "type": "chips",
-                            "options": [
-                                {"text": "అందుబాటులో ఉన్న టిక్కెట్లు"},
-                                {"text": "భాష"}
+                "fulfillmentMessages": [
+                    {
+                        "text": {
+                            "text": [
+                                "నేను మీకు ఎలా సహాయపడగలను?"
                             ]
                         }
-                    ]
+                    },
+                    {
+                        "payload": {
+                            "richContent": [
+                                [
+                                    {
+                                        "type": "chips",
+                                        "options": [
+                                            {"text": "అందుబాటులో ఉన్న టిక్కెట్లు"},
+                                            {"text": "భాష"}
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    }
                 ]
             }
 
