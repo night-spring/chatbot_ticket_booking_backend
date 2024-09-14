@@ -160,14 +160,6 @@ async def reserve_tickets(response: TicketRequest):
 @app.post("/webhook")
 async def webhook(request: Request):
 
-    try:
-        body = await request.json()
-        print(json.dumps(body, indent=4))  # Log the request body for debugging
-    except Exception as e:
-        return {
-            "fulfillmentText": f"Error parsing request: {str(e)}"
-        }
-
     intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
     if intent_name == "ReserveTicket":
         parameters = body.get("queryResult", {}).get("parameters", {})
