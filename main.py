@@ -186,7 +186,7 @@ async def webhook(request: Request):
                         {
                             "type": "chips",
                             "options": [
-                                {"text": "उपलब्ध तिकिटे"},
+                                {"text": "test"},
                                 {"text": "भाषा"}
                             ]
                         }
@@ -201,8 +201,8 @@ async def webhook(request: Request):
                         {
                             "type": "chips",
                             "options": [
-                                {"text": "প্রাপ্তব্য টিকেট"},
-                                {"text": "ভাষা"}
+                                {"text": "test 1"},
+                                {"text": "language"}
                             ]
                         }
                     ]
