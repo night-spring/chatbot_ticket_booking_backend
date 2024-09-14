@@ -297,7 +297,8 @@ def handle_marathi(body):
         ]
     }
     return response
-
+def handle_marathi_ticket(body):
+    pass
 def handle_bengali(body):
     response = {
         "fulfillmentMessages": [
@@ -326,7 +327,8 @@ def handle_bengali(body):
         ]
     }
     return response
-
+def handle_bengali_ticket(body):
+    pass
 def handle_tamil(body):
     response = {
         "fulfillmentMessages": [
@@ -355,7 +357,8 @@ def handle_tamil(body):
         ]
     }
     return response
-
+def handle_tamil_ticket(body):
+    pass
 def handle_telugu(body):
     response = {
         "fulfillmentMessages": [
@@ -384,7 +387,8 @@ def handle_telugu(body):
         ]
     }
     return response
-
+def handle_telugu_ticket(body):
+    pass
 def handle_reserve_tickets(body):
     parameters = body.get("queryResult", {}).get("parameters", {})
     ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
@@ -449,6 +453,11 @@ INTENT_HANDLERS = {
     "telugu": handle_telugu,
     "ReserveTickets": handle_reserve_tickets,
     "Text_tickets": handle_text_tickets,
+    "LangHindi": handle_hindi_ticket,
+    "LangMarathi": handle_marathi_ticket,
+    "LangBengali": handle_bengali_ticket,
+    "LangTamil": handle_tamil_ticket,
+    "LangTelugu": handle_telugu_ticket,
 }
 
 @app.post("/webhook")
