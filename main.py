@@ -310,7 +310,7 @@ async def webhook(request: Request):
             ticket_cost = 20
             total_cost = ticket * ticket_cost
             payment_link='placeholder'
-            fulfillment_text = f"Your total is ₹{total_cost},the tickets will be mailed to you @{email}.\n proceed for payment: \n {payment_link}" 
+            fulfillment_text = f"Your total is ₹{total_cost}, \nthe tickets will be mailed to you at {email}.\n proceed for payment: \n {payment_link}" 
             response = {"fulfillmentText": fulfillment_text}
         
         elif intent_name == "Text_tickets":
