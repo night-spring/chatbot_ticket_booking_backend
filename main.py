@@ -298,7 +298,87 @@ def handle_marathi(body):
     }
     return response
 def handle_marathi_ticket(body):
-    pass
+    response = {
+        "fulfillmentMessages": [
+            {
+                "payload": {
+                    "richContent": [
+                        [
+                            {
+                                "event": {
+                                    "name": "ReserveTicketsMarathi",
+                                    "parameters": {
+                                        "ticket_type": "प्रवेश"
+                                    }
+                                },
+                                "title": "प्रवेश",
+                                "subtitle": "संग्रहालयात प्रवेश\n₹70",
+                                "type": "list"
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "event": {
+                                    "name": "ReserveTicketsMarathi",
+                                    "parameters": {
+                                        "ticket_type": "अमर खजिना"
+                                    }
+                                },
+                                "title": "अमर खजिना",
+                                "subtitle": "ऐतिहासिक कलाकृतींचे प्रदर्शन\n₹100",
+                                "type": "list"
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "युगानुयुगे कला",
+                                "subtitle": "विविध कालखंडातील कलेचा विकास\n₹120",
+                                "event": {
+                                    "name": "ReserveTicketsMarathi",
+                                    "parameters": {
+                                        "ticket_type": "युगानुयुगे कला"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "अकथित कथा",
+                                "subtitle": "भूतकाळातील लपलेल्या कथा उलगडा करा\n₹150",
+                                "event": {
+                                    "name": "ReserveTicketsMarathi",
+                                    "parameters": {
+                                        "ticket_type": "अकथित कथा"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "आधुनिक माहेर",
+                                "subtitle": "आधुनिकतेचे प्रदर्शन\n₹100",
+                                "event": {
+                                    "name": "ReserveTicketsMarathi",
+                                    "parameters": {
+                                        "ticket_type": "आधुनिक माहेर"
+                                    }
+                                }
+                            }
+                        ]
+                    ]
+                }
+            }
+        ]
+    }
+    return response
+
 def handle_bengali(body):
     response = {
         "fulfillmentMessages": [
@@ -328,7 +408,87 @@ def handle_bengali(body):
     }
     return response
 def handle_bengali_ticket(body):
-    pass
+    response = {
+        "fulfillmentMessages": [
+            {
+                "payload": {
+                    "richContent": [
+                        [
+                            {
+                                "event": {
+                                    "name": "ReserveTicketsBengali",
+                                    "parameters": {
+                                        "ticket_type": "প্রবেশ"
+                                    }
+                                },
+                                "title": "প্রবেশ",
+                                "subtitle": "জাদুঘরে প্রবেশাধিকার\n₹70",
+                                "type": "list"
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "event": {
+                                    "name": "ReserveTicketsBengali",
+                                    "parameters": {
+                                        "ticket_type": "চিরন্তন ধন"
+                                    }
+                                },
+                                "title": "চিরন্তন ধন",
+                                "subtitle": "ঐতিহাসিক নিদর্শনের প্রদর্শনী\n₹100",
+                                "type": "list"
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "যুগে যুগে শিল্পকলা",
+                                "subtitle": "বিভিন্ন যুগের শিল্পকলার বিকাশ\n₹120",
+                                "event": {
+                                    "name": "ReserveTicketsBengali",
+                                    "parameters": {
+                                        "ticket_type": "যুগে যুগে শিল্পকলা"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "অজানা গল্পগুলি",
+                                "subtitle": "অতীতের গোপন গল্প আবিষ্কার করুন\n₹150",
+                                "event": {
+                                    "name": "ReserveTicketsBengali",
+                                    "parameters": {
+                                        "ticket_type": "অজানা গল্পগুলি"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "আধুনিক মায়েস্ত্রো",
+                                "subtitle": "আধুনিকতার প্রদর্শনী\n₹100",
+                                "event": {
+                                    "name": "ReserveTicketsBengali",
+                                    "parameters": {
+                                        "ticket_type": "আধুনিক মায়েস্ত্রো"
+                                    }
+                                }
+                            }
+                        ]
+                    ]
+                }
+            }
+        ]
+    }
+    return response
+
 def handle_tamil(body):
     response = {
         "fulfillmentMessages": [
@@ -358,7 +518,169 @@ def handle_tamil(body):
     }
     return response
 def handle_tamil_ticket(body):
-    pass
+    response = {
+        "fulfillmentMessages": [
+            {
+                "payload": {
+                    "richContent": [
+                        [
+                            {
+                                "event": {
+                                    "name": "ReserveTicketsTamil",
+                                    "parameters": {
+                                        "ticket_type": "நுழைவு"
+                                    }
+                                },
+                                "title": "நுழைவு",
+                                "subtitle": "அருங்காட்சியகத்தில் நுழைவு\n₹70",
+                                "type": "list"
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "event": {
+                                    "name": "ReserveTicketsTamil",
+                                    "parameters": {
+                                        "ticket_type": "நிறம்கொடையில்லா நிதிகள்"
+                                    }
+                                },
+                                "title": "நிறம்கொடையில்லா நிதிகள்",
+                                "subtitle": "வரலாற்று பொருட்களின் கண்காட்சி\n₹100",
+                                "type": "list"
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "காலங்களின் வழியாகக் கலை",
+                                "subtitle": "பல்வேறு காலக்கட்டங்களில் கலை வளர்ச்சி\n₹120",
+                                "event": {
+                                    "name": "ReserveTicketsTamil",
+                                    "parameters": {
+                                        "ticket_type": "காலங்களின் வழியாகக் கலை"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "சொல்லப்படாத கதைகள்",
+                                "subtitle": "கடந்த காலத்தின் மறைந்த கதைகளை கண்டறியுங்கள்\n₹150",
+                                "event": {
+                                    "name": "ReserveTicketsTamil",
+                                    "parameters": {
+                                        "ticket_type": "சொல்லப்படாத கதைகள்"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "நவீன இசைஞர்",
+                                "subtitle": "நவீனத்தை அறிமுகப்படுத்துகிறது\n₹100",
+                                "event": {
+                                    "name": "ReserveTicketsTamil",
+                                    "parameters": {
+                                        "ticket_type": "நவீன இசைஞர்"
+                                    }
+                                }
+                            }
+                        ]
+                    ]
+                }
+            }
+        ]
+    }
+    return response
+
+def handle_telugu_ticket(body):
+    response = {
+        "fulfillmentMessages": [
+            {
+                "payload": {
+                    "richContent": [
+                        [
+                            {
+                                "event": {
+                                    "name": "ReserveTicketsTelugu",
+                                    "parameters": {
+                                        "ticket_type": "ప్రవేశం"
+                                    }
+                                },
+                                "title": "ప్రవేశం",
+                                "subtitle": "సంగ్రహాలయంలోకి ప్రవేశం\n₹70",
+                                "type": "list"
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "event": {
+                                    "name": "ReserveTicketsTelugu",
+                                    "parameters": {
+                                        "ticket_type": "శాశ్వత ఖజానా"
+                                    }
+                                },
+                                "title": "శాశ్వత ఖజానా",
+                                "subtitle": "చారిత్రక కళాఖండాల ప్రదర్శన\n₹100",
+                                "type": "list"
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "యుగాల ద్వారా కళ",
+                                "subtitle": "వివిధ యుగాలలో కళ యొక్క పరిణామం\n₹120",
+                                "event": {
+                                    "name": "ReserveTicketsTelugu",
+                                    "parameters": {
+                                        "ticket_type": "యుగాల ద్వారా కళ"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "చెప్పని కథలు",
+                                "subtitle": "గతంలోని దాచిన కథలను వెలికితీయండి\n₹150",
+                                "event": {
+                                    "name": "ReserveTicketsTelugu",
+                                    "parameters": {
+                                        "ticket_type": "చెప్పని కథలు"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "type": "list",
+                                "title": "ఆధునిక మాస్ట్రో",
+                                "subtitle": "ఆధునికతను ప్రదర్శిస్తోంది\n₹100",
+                                "event": {
+                                    "name": "ReserveTicketsTelugu",
+                                    "parameters": {
+                                        "ticket_type": "ఆధునిక మాస్ట్రో"
+                                    }
+                                }
+                            }
+                        ]
+                    ]
+                }
+            }
+        ]
+    }
+    return response
+
 def handle_telugu(body):
     response = {
         "fulfillmentMessages": [
@@ -387,24 +709,70 @@ def handle_telugu(body):
         ]
     }
     return response
-def handle_telugu_ticket(body):
-    pass
 def handle_reserve_tickets(body):
     parameters = body.get("queryResult", {}).get("parameters", {})
     ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
     email = parameters.get("email")
     ticket_type = parameters.get("ticket_type")
-    ticket_cost = 20
+    ticket_cost = 70
     total_cost = ticket * ticket_cost
-    payment_link = 'placeholder'
-    fulfillment_text = f"Your total is ₹{total_cost}, \nthe tickets will be mailed to you at {email}.\nProceed for payment: \n{payment_link}"
-    response = {"fulfillmentText": fulfillment_text}
+    response = {
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        f"Your total is ₹{total_cost}, \nthe tickets will be mailed to you at {email}.\nProceed for payment:"
+                    ]
+                }
+            },
+            {
+                "payload": {
+  "richContent": [
+    [
+      {
+        "options": [
+          {
+            "image": {
+              "src": {
+                "rawUrl": "https://imgur.com/fp0VcNM"
+              }
+            },
+            "text": "Google Pay",
+            "link": "https://example.com/googlepay"
+          },
+          {
+            "link": "https://example.com/phonepe.com",
+            "image": {
+              "src": {
+                "rawUrl": "https://s3.amazonaws.com/shecodesio-production/uploads/files/000/143/327/original/Create_Account.jpeg?1726258586"
+              }
+            },
+            "text": "PhonePe"
+          },
+          {
+            "link": "https://example.com/credit-card-payment",
+            "text": "Credit Card",
+            "image": {
+              "src": {
+                "rawUrl": " https://s3.amazonaws.com/shecodesio-production/uploads/files/000/143/328/original/Credit_cards_vector_icon.jpeg?1726258598"
+              }
+            }
+          }
+        ],
+        "type": "chips"
+      }
+    ]
+  ]
+}
+            }
+        ]
+    }
     return response
 
 def handle_text_tickets(body):
     parameters = body.get("queryResult", {}).get("parameters", {})
     ticket = int(parameters.get("Ticket", 0))
-    ticket_cost = 20
+    ticket_cost = 70
     total_cost = ticket * ticket_cost
     payment_link = 'placeholder'
     fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment: \n{payment_link}."
@@ -451,8 +819,10 @@ INTENT_HANDLERS = {
     "bengali": handle_bengali,
     "tamil": handle_tamil,
     "telugu": handle_telugu,
+    
     "ReserveTickets": handle_reserve_tickets,
     "Text_tickets": handle_text_tickets,
+    
     "LangHindi": handle_hindi_ticket,
     "LangMarathi": handle_marathi_ticket,
     "LangBengali": handle_bengali_ticket,
