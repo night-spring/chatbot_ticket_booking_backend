@@ -157,177 +157,310 @@ async def reserve_tickets(response: TicketRequest):
 #chatbot
 
 
+def handle_hindi(body):
+    response = {
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        "मैं आपकी किस प्रकार मदद कर सकता हूँ?"
+                    ]
+                }
+            },
+            {
+                "payload": {
+                    "richContent": [
+                        [
+                            {
+                                "type": "chips",
+                                "options": [
+                                    {"text": "टिकट"},
+                                    {"text": "भाषा"}
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            }
+        ]
+    }
+    return response
+
+def handle_hindi_ticket(body):
+    response = {
+        "fulfillmentMessages": [
+            {
+                "payload": {
+                    "richContent": [
+                        [
+                        {
+                            "event": {
+                            "name": "ReserveTicketsHindi",
+                            "parameters": {
+                                "ticket_type": "प्रवेश"
+                            }
+                            },
+                            "title": "प्रवेश",
+                            "subtitle": "संग्रहालय तक प्रवेश\n₹70",
+                            "type": "list"
+                        },
+                        {
+                            "type": "divider"
+                        },
+                        {
+                            "event": {
+                            "parameters": {
+                                "ticket_type": "अनमोल धरोहर"
+                            },
+                            "name": "ReserveTicketsHindi"
+                            },
+                            "title": "अनमोल धरोहर",
+                            "subtitle": "ऐतिहासिक कलाकृतियों की प्रदर्शनी\n₹100",
+                            "type": "list"
+                        },
+                        {
+                            "type": "divider"
+                        },
+                        {
+                            "type": "list",
+                            "subtitle": "विभिन्न युगों की कला का विकास\n₹120",
+                            "title": "युगों के माध्यम से कला",
+                            "event": {
+                            "name": "ReserveTicketsHindi",
+                            "parameters": {
+                                "ticket_type": "युगों के माध्यम से कला"
+                            }
+                            }
+                        },
+                        {
+                            "type": "divider"
+                        },
+                        {
+                            "subtitle": "अतीत की छुपी कहानियों को जानें\n₹150",
+                            "type": "list",
+                            "title": "अनकही कहानियाँ",
+                            "event": {
+                            "name": "ReserveTicketsHindi",
+                            "parameters": {
+                                "ticket_type": "अनकही कहानियाँ"
+                            }
+                            }
+                        },
+                        {
+                            "type": "divider"
+                        },
+                        {
+                            "subtitle": "आधुनिकता का प्रदर्शन\n₹100",
+                            "event": {
+                            "name": "ReserveTicketsHindi",
+                            "parameters": {
+                                "ticket_type": "आधुनिक माहिर"
+                            }
+                            },
+                            "type": "list",
+                            "title": "आधुनिक माहिर"
+                        }
+                        ]
+                    ]
+                    }
+
+            }
+        ]
+    }
+    return response
+
+def handle_marathi(body):
+    response = {
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        "मी तुम्हाला कसे मदत करू शकतो?"
+                    ]
+                }
+            },
+            {
+                "payload": {
+                    "richContent": [
+                        [
+                            {
+                                "type": "chips",
+                                "options": [
+                                    {"text": "तिकिटे"},
+                                    {"text": "भाषा"}
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            }
+        ]
+    }
+    return response
+
+def handle_bengali(body):
+    response = {
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        "কিভাবে আমি আপনাকে সাহায্য করতে পারি?"
+                    ]
+                }
+            },
+            {
+                "payload": {
+                    "richContent": [
+                        [
+                            {
+                                "type": "chips",
+                                "options": [
+                                    {"text": "টিকেট"},
+                                    {"text": "ভাষা"}
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            }
+        ]
+    }
+    return response
+
+def handle_tamil(body):
+    response = {
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        "நான் உங்களுக்கு எப்படி உதவ முடியும்?"
+                    ]
+                }
+            },
+            {
+                "payload": {
+                    "richContent": [
+                        [
+                            {
+                                "type": "chips",
+                                "options": [
+                                    {"text": "டிக்கெட்டுகள்"},
+                                    {"text": "மொழி"}
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            }
+        ]
+    }
+    return response
+
+def handle_telugu(body):
+    response = {
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        "నేను మీకు ఎలా సహాయపడగలను?"
+                    ]
+                }
+            },
+            {
+                "payload": {
+                    "richContent": [
+                        [
+                            {
+                                "type": "chips",
+                                "options": [
+                                    {"text": "టిక్కెట్లు"},
+                                    {"text": "భాష"}
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            }
+        ]
+    }
+    return response
+
+def handle_reserve_tickets(body):
+    parameters = body.get("queryResult", {}).get("parameters", {})
+    ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
+    email = parameters.get("email")
+    ticket_type = parameters.get("ticket_type")
+    ticket_cost = 20
+    total_cost = ticket * ticket_cost
+    payment_link = 'placeholder'
+    fulfillment_text = f"Your total is ₹{total_cost}, \nthe tickets will be mailed to you at {email}.\nProceed for payment: \n{payment_link}"
+    response = {"fulfillmentText": fulfillment_text}
+    return response
+
+def handle_text_tickets(body):
+    parameters = body.get("queryResult", {}).get("parameters", {})
+    ticket = int(parameters.get("Ticket", 0))
+    ticket_cost = 20
+    total_cost = ticket * ticket_cost
+    payment_link = 'placeholder'
+    fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment: \n{payment_link}."
+    response = {"fulfillmentText": fulfillment_text}
+    return response
+
+def handle_default(body):
+    response = {
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        "I didn't understand."
+                    ]
+                }
+            },
+            {
+                "payload": {
+                        "richContent": [
+                            [
+                            {
+                                "type": "chips",
+                                "options": [
+                                {
+                                    "text": "Available Tickets"
+                                },
+                                {
+                                    "text": "Language"
+                                }
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            }
+        ]
+    }
+    return response
+
+# Map intent names to handler functions
+INTENT_HANDLERS = {
+    "hindi": handle_hindi,
+    "marathi": handle_marathi,
+    "bengali": handle_bengali,
+    "tamil": handle_tamil,
+    "telugu": handle_telugu,
+    "ReserveTickets": handle_reserve_tickets,
+    "Text_tickets": handle_text_tickets,
+}
+
 @app.post("/webhook")
 async def webhook(request: Request):
     try:
         body = await request.json()
+        intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
 
-        intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")      
-        if intent_name == "hindi":
-            response = {
-  "fulfillmentMessages": [
-    {
-      "text": {
-        "text": [
-          "मैं आपकी किस प्रकार मदद कर सकता हूँ?"
-        ]
-      }
-    },
-    {
-      "payload": {
-        "richContent": [
-          [
-            {
-              "type": "chips",
-              "options": [
-                {"text": "टिकट"},
-                {"text": "भाषा"}
-              ]
-            }
-          ]
-        ]
-      }
-    }
-  ]
-}
-
-        elif intent_name == "marathi":
-            response = {
-  "fulfillmentMessages": [
-    {
-      "text": {
-        "text": [
-          "मी तुम्हाला कसे मदत करू शकतो?"
-        ]
-      }
-    },
-    {
-      "payload": {
-        "richContent": [
-          [
-            {
-              "type": "chips",
-              "options": [
-                {"text": "तिकिटे"},
-                {"text": "भाषा"}
-              ]
-            }
-          ]
-        ]
-      }
-    }
-  ]
-}
-
-        elif intent_name == "bengali":
-            response = {
-  "fulfillmentMessages": [
-    {
-      "text": {
-        "text": [
-          "কিভাবে আমি আপনাকে সাহায্য করতে পারি?"
-        ]
-      }
-    },
-    {
-      "payload": {
-        "richContent": [
-          [
-            {
-              "type": "chips",
-              "options": [
-                {"text": "টিকেট"},
-                {"text": "ভাষা"}
-              ]
-            }
-          ]
-        ]
-      }
-    }
-  ]
-}
-
-        elif intent_name == "tamil":
-            response = {
-                "fulfillmentMessages": [
-                    {
-                        "text": {
-                            "text": [
-                                "நான் உங்களுக்கு எப்படி உதவ முடியும்?"
-                            ]
-                        }
-                    },
-                    {
-                        "payload": {
-                            "richContent": [
-                                [
-                                    {
-                                        "type": "chips",
-                                        "options": [
-                                            {"text": "டிக்கெட்டுகள்"},
-                                            {"text": "மொழி"}
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    }
-                ]
-            }
-        elif intent_name == "telugu":
-            response = {
-                "fulfillmentMessages": [
-                    {
-                        "text": {
-                            "text": [
-                                "నేను మీకు ఎలా సహాయపడగలను?"
-                            ]
-                        }
-                    },
-                    {
-                        "payload": {
-                            "richContent": [
-                                [
-                                    {
-                                        "type": "chips",
-                                        "options": [
-                                            {"text": "టిక్కెట్లు"},
-                                            {"text": "భాష"}
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    }
-                ]
-            }
-
-        elif intent_name == "ReserveTickets":
-            parameters = body.get("queryResult", {}).get("parameters", {})
-            ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
-            email = parameters.get("email")
-            ticket_type = parameters.get("ticket_type")
-            ticket_cost = 20
-            total_cost = ticket * ticket_cost
-            payment_link='placeholder'
-            fulfillment_text = f"Your total is ₹{total_cost}, \nthe tickets will be mailed to you at {email}.\n proceed for payment: \n {payment_link}" 
-            response = {"fulfillmentText": fulfillment_text}
-        
-        elif intent_name == "Text_tickets":
-            parameters = body.get("queryResult", {}).get("parameters", {})
-            ticket = int(parameters.get("Ticket", 0)) 
-            ticket_cost = 20
-            total_cost = ticket * ticket_cost
-            payment_link='placeholder'
-            fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment: \n {payment_link}."
-            response = {"fulfillmentText": fulfillment_text}
-        
-        else:
-            fulfillment_text = "I didn't understand."
-            response = {"fulfillmentText": fulfillment_text}
+        handler = INTENT_HANDLERS.get(intent_name, handle_default)
+        response = handler(body)
 
         return response
-    
     except Exception as e:
         # Log and return the error message
         print(f"Error: {e}")
