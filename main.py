@@ -160,14 +160,11 @@ async def reserve_tickets(response: TicketRequest):
 @app.post("/webhook")
 async def webhook(request: Request):
     try:
-        # Parse the incoming JSON body
         body = await request.json()
 
-        # Extract the intent name
         intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
 
-        # Handle intents
-        if intent_name == "ReserveTicket":
+        if intent_name == "ReserveTickets":
             parameters = body.get("queryResult", {}).get("parameters", {})
             ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
             email = parameters.get("email")
@@ -177,9 +174,9 @@ async def webhook(request: Request):
             fulfillment_text = (f"Webhook received! You requested {ticket} tickets "
                                 f"for the show '{ticket_type}' and your total is {total_cost}.")
         
-        elif intent_name == "Text_ticket":
+        elif intent_name == "Text_tickets":
             parameters = body.get("queryResult", {}).get("parameters", {})
-            ticket = int(parameters.get("Ticket", 0))  # Convert to int if necessary
+            ticket = int(parameters.get("Ticket", 0)) 
             ticket_cost = 20
             total_cost = ticket * ticket_cost
             fulfillment_text = f"Your total is {total_cost}, proceed for payment."
