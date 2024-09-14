@@ -174,7 +174,7 @@ async def webhook(request: Request, body: DialogflowRequest):
     
     elif intent_name == "Text_ticket":
         parameters = body.queryResult.get("parameters", {})
-        ticket = parameters.get("ticket")
+        ticket = parameters.get("Ticket")
         ticket_cost = 20
         total_cost = ticket * ticket_cost
 
