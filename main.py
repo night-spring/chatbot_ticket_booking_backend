@@ -2,10 +2,10 @@ from bson import ObjectId
 from datetime import datetime
 import pytz
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from typing import List
 from database import tickets_collection, earnings_collection, profit_collection, shows_collections, payment_collection
-from model import Earnings, Tickets, ResolutionTime, Shows, TicketUpdate, PaymentDetails, TicketRequest
+from model import Earnings, Tickets, ResolutionTime, Shows, TicketUpdate, PaymentDetails, TicketRequest, DialogflowRequest  
 #from insert import insert_initial_data
 # FastAPI app setup
 app = FastAPI()
