@@ -179,7 +179,7 @@ async def webhook(request: Request):
         
         elif intent_name == "Text_ticket":
             parameters = body.get("queryResult", {}).get("parameters", {})
-            ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
+            ticket = int(parameters.get("Ticket", 0))  # Convert to int if necessary
             ticket_cost = 20
             total_cost = ticket * ticket_cost
             fulfillment_text = f"Your total is {total_cost}, proceed for payment."
