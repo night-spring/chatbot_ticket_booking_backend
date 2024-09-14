@@ -178,98 +178,98 @@ async def webhook(request: Request):
             ]
         ]
     }
-elif intent_name == "marathi":
-    response = {
-        "fulfillmentText": "मी आपल्याला कशी मदत करू शकतो?",
-        "richContent": [
-            [
-                {
-                    "type": "chips",
-                    "options": [
-                        {"text": "उपलब्ध तिकिटे"},
-                        {"text": "भाषा"}
+        elif intent_name == "marathi":
+            response = {
+                "fulfillmentText": "मी आपल्याला कशी मदत करू शकतो?",
+                "richContent": [
+                    [
+                        {
+                            "type": "chips",
+                            "options": [
+                                {"text": "उपलब्ध तिकिटे"},
+                                {"text": "भाषा"}
+                            ]
+                        }
                     ]
-                }
-            ]
-        ]
-    }
-elif intent_name == "bengali":
-    response = {
-        "fulfillmentText": "আমি কিভাবে সাহায্য করতে পারি?",
-        "richContent": [
-            [
-                {
-                    "type": "chips",
-                    "options": [
-                        {"text": "প্রাপ্তব্য টিকেট"},
-                        {"text": "ভাষা"}
+                ]
+            }
+        elif intent_name == "bengali":
+            response = {
+                "fulfillmentText": "আমি কিভাবে সাহায্য করতে পারি?",
+                "richContent": [
+                    [
+                        {
+                            "type": "chips",
+                            "options": [
+                                {"text": "প্রাপ্তব্য টিকেট"},
+                                {"text": "ভাষা"}
+                            ]
+                        }
                     ]
-                }
-            ]
-        ]
-    }
-elif intent_name == "tamil":
-    response = {
-        "fulfillmentText": "நான் உங்களுக்கு எப்படி உதவ முடியும்?",
-        "richContent": [
-            [
-                {
-                    "type": "chips",
-                    "options": [
-                        {"text": "கிடைக்கக்கூடிய டிக்கெட்டுகள்"},
-                        {"text": "மொழி"}
+                ]
+            }
+        elif intent_name == "tamil":
+            response = {
+                "fulfillmentText": "நான் உங்களுக்கு எப்படி உதவ முடியும்?",
+                "richContent": [
+                    [
+                        {
+                            "type": "chips",
+                            "options": [
+                                {"text": "கிடைக்கக்கூடிய டிக்கெட்டுகள்"},
+                                {"text": "மொழி"}
+                            ]
+                        }
                     ]
-                }
-            ]
-        ]
-    }
-elif intent_name == "telugu":
-    response = {
-        "fulfillmentText": "నేను మీకు ఎలా సహాయపడగలను?",
-        "richContent": [
-            [
-                {
-                    "type": "chips",
-                    "options": [
-                        {"text": "అందుబాటులో ఉన్న టిక్కెట్లు"},
-                        {"text": "భాష"}
+                ]
+            }
+        elif intent_name == "telugu":
+            response = {
+                "fulfillmentText": "నేను మీకు ఎలా సహాయపడగలను?",
+                "richContent": [
+                    [
+                        {
+                            "type": "chips",
+                            "options": [
+                                {"text": "అందుబాటులో ఉన్న టిక్కెట్లు"},
+                                {"text": "భాష"}
+                            ]
+                        }
                     ]
-                }
-            ]
-        ]
-    }
+                ]
+            }
 
-        
-        
-        
-        
-        elif intent_name == "ReserveTickets":
-            parameters = body.get("queryResult", {}).get("parameters", {})
-            ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
-            email = parameters.get("email")
-            ticket_type = parameters.get("ticket_type")
-            ticket_cost = 20
-            total_cost = ticket * ticket_cost
-            fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment. your tickets will be mailed to you @{email}" 
-            response = {"fulfillmentText": fulfillment_text}
-        
-        elif intent_name == "Text_tickets":
-            parameters = body.get("queryResult", {}).get("parameters", {})
-            ticket = int(parameters.get("Ticket", 0)) 
-            ticket_cost = 20
-            total_cost = ticket * ticket_cost
-            fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment."
-            response = {"fulfillmentText": fulfillment_text}
-        
-        else:
-            fulfillment_text = "I didn't understand."
-            response = {"fulfillmentText": fulfillment_text}
+                
+                
+                
+                
+                elif intent_name == "ReserveTickets":
+                    parameters = body.get("queryResult", {}).get("parameters", {})
+                    ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
+                    email = parameters.get("email")
+                    ticket_type = parameters.get("ticket_type")
+                    ticket_cost = 20
+                    total_cost = ticket * ticket_cost
+                    fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment. your tickets will be mailed to you @{email}" 
+                    response = {"fulfillmentText": fulfillment_text}
+                
+                elif intent_name == "Text_tickets":
+                    parameters = body.get("queryResult", {}).get("parameters", {})
+                    ticket = int(parameters.get("Ticket", 0)) 
+                    ticket_cost = 20
+                    total_cost = ticket * ticket_cost
+                    fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment."
+                    response = {"fulfillmentText": fulfillment_text}
+                
+                else:
+                    fulfillment_text = "I didn't understand."
+                    response = {"fulfillmentText": fulfillment_text}
 
-        return response
-    
-    except Exception as e:
-        # Log and return the error message
-        print(f"Error: {e}")
-        return {
-            "fulfillmentText": f"Webhook error: {str(e)}"
-        }
+                return response
+            
+            except Exception as e:
+                # Log and return the error message
+                print(f"Error: {e}")
+                return {
+                    "fulfillmentText": f"Webhook error: {str(e)}"
+                }
