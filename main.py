@@ -180,7 +180,7 @@ async def webhook(request: Request):
             {
               "type": "chips",
               "options": [
-                {"text": "उपलब्ध टिकट"},
+                {"text": "टिकट"},
                 {"text": "भाषा"}
               ]
             }
@@ -208,7 +208,7 @@ async def webhook(request: Request):
             {
               "type": "chips",
               "options": [
-                {"text": "उपलब्ध तिकिटे"},
+                {"text": "तिकिटे"},
                 {"text": "भाषा"}
               ]
             }
@@ -236,7 +236,7 @@ async def webhook(request: Request):
             {
               "type": "chips",
               "options": [
-                {"text": "প্রাপ্তব্য টিকেট"},
+                {"text": "টিকেট"},
                 {"text": "ভাষা"}
               ]
             }
@@ -264,7 +264,7 @@ async def webhook(request: Request):
                                     {
                                         "type": "chips",
                                         "options": [
-                                            {"text": "கிடைக்கக்கூடிய டிக்கெட்டுகள்"},
+                                            {"text": "டிக்கெட்டுகள்"},
                                             {"text": "மொழி"}
                                         ]
                                     }
@@ -291,7 +291,7 @@ async def webhook(request: Request):
                                     {
                                         "type": "chips",
                                         "options": [
-                                            {"text": "అందుబాటులో ఉన్న టిక్కెట్లు"},
+                                            {"text": "టిక్కెట్లు"},
                                             {"text": "భాష"}
                                         ]
                                     }
@@ -309,7 +309,8 @@ async def webhook(request: Request):
             ticket_type = parameters.get("ticket_type")
             ticket_cost = 20
             total_cost = ticket * ticket_cost
-            fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment. your tickets will be mailed to you @{email}" 
+            payment_link='placeholder'
+            fulfillment_text = f"Your total is ₹{total_cost},the tickets will be mailed to you @{email}.\n proceed for payment: \n {payment_link}" 
             response = {"fulfillmentText": fulfillment_text}
         
         elif intent_name == "Text_tickets":
@@ -317,7 +318,8 @@ async def webhook(request: Request):
             ticket = int(parameters.get("Ticket", 0)) 
             ticket_cost = 20
             total_cost = ticket * ticket_cost
-            fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment."
+            payment_link='placeholder'
+            fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment: \n {payment_link}."
             response = {"fulfillmentText": fulfillment_text}
         
         else:
