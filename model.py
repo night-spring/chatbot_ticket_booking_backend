@@ -1,6 +1,7 @@
 from bson import ObjectId
 from pydantic import BaseModel, EmailStr
-from typing import Dict, Optional, Any
+from typing import Dict, Optional, Any, List
+
 
 class Earnings(BaseModel):
     productSales: int
@@ -28,22 +29,24 @@ class Shows(BaseModel):
     image: str
     title: str
     date: str
+    time: str
     location: str
     price: str
     ticketsLeft: int
     id: str
 
 
-class TicketUpdate(BaseModel):
-    eventId: str
-    ticketsBought: int
-
 class PaymentDetails(BaseModel):
+    eventId: str
+    selectedSeats: List[int]
+    seatCount: int
     email: EmailStr
-    phone: str
+    amount: float
+
 
 class TicketRequest(BaseModel):
     queryResult: dict
+
 
 # Define the structure of the Dialogflow request
 class QueryResult(BaseModel):
