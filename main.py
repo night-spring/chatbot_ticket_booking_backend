@@ -7,7 +7,7 @@ import smtplib
 from email.message import EmailMessage
 from typing import List
 from database import tickets_collection, earnings_collection, profit_collection, shows_collections, payment_collection
-from model import Earnings, Tickets, ResolutionTime, Shows, TicketUpdate, PaymentDetails, TicketRequest, DialogflowRequest  
+from model import Earnings, Tickets, ResolutionTime, Shows, PaymentDetails, TicketRequest, DialogflowRequest  
 #from insert import insert_initial_data
 # FastAPI app setup
 app = FastAPI()
