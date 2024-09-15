@@ -3,6 +3,8 @@ from datetime import datetime
 import pytz
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, HTTPException, Query, Request
+import smtplib
+from email.message import EmailMessage
 from typing import List
 from database import tickets_collection, earnings_collection, profit_collection, shows_collections, payment_collection
 from model import Earnings, Tickets, ResolutionTime, Shows, TicketUpdate, PaymentDetails, TicketRequest, DialogflowRequest  
@@ -89,40 +91,86 @@ async def get_event(event_id: str = Query(..., alias="event_id")):
     }
 
 
-# The existing POST endpoint for updating ticket bookings
-@app.post("/ticket_booking/update")
-async def update_ticket_booking(ticket_update: TicketUpdate):
-    event_id = ObjectId(ticket_update.eventId)
-    event = await shows_collections.find_one({"_id": event_id})
-    new_tickets_left = event.get("ticketsLeft", 0) - ticket_update.ticketsBought
-    if new_tickets_left < 0:
-        raise HTTPException(status_code=400, detail="Not enough tickets left")
-    result = await shows_collections.update_one(
-        {"_id": event_id},
-        {"$set": {"ticketsLeft": new_tickets_left}}
-    )
-    if result.modified_count == 0:
-        raise HTTPException(status_code=500, detail="Failed to update tickets left")
-    return {"success": True, "ticketsLeft": new_tickets_left}  # Return updated ticketsLeft
-
 @app.post("/ticket_booking/payment")
 async def update_payment(payment_details: PaymentDetails):
-    # Check if email or phone number already exists
+    # Check if email already exists to avoid duplicate payments
     existing_payment = await payment_collection.find_one({
         "email": payment_details.email,
-        "phone": payment_details.phone
     })
 
-    if existing_payment:
-        raise HTTPException(status_code=400, detail="Payment details already exist")
+    # Simulate payment processing here (add real payment gateway logic)
+    # For simplicity, let's assume the payment is successful
 
     # Insert payment details into the database
     result = await payment_collection.insert_one(payment_details.dict())
-
     if not result.inserted_id:
         raise HTTPException(status_code=500, detail="Failed to save payment details")
 
-    return {"message": "Payment details saved successfully", "id": str(result.inserted_id)}
+    # Update ticket count after successful payment
+    event_id = ObjectId(payment_details.eventId)
+    event = await shows_collections.find_one({"_id": event_id})
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+
+    new_tickets_left = event.get("ticketsLeft", 0) - payment_details.seatCount
+    if new_tickets_left < 0:
+        raise HTTPException(status_code=400, detail="Not enough tickets left")
+
+    # Update the tickets left in the database
+    update_result = await shows_collections.update_one(
+        {"_id": event_id},
+        {"$set": {"ticketsLeft": new_tickets_left}}
+    )
+
+    if update_result.modified_count == 0:
+        raise HTTPException(status_code=500, detail="Failed to update tickets")
+
+    # Function to send emai
+    email_address = "debojit94333@gmail.com"  # Your Gmail
+    email_password = "qabi jido ztsf waut"  # App-specific password
+
+    # Create the email body
+    msg = EmailMessage()
+    msg['Subject'] = f"Ticket Booking Confirmation for {event['title']}"
+    msg['From'] = email_address
+    msg['To'] = payment_details.email
+    msg.set_content(
+    f"""\
+                Dear Customer,
+
+                Thank you for booking tickets for the show: {event['title']}.
+
+                Here are the details of your booking:
+                - Show Name: {event['title']}
+                - Date: {event['date']}
+                - Time: {event['time']}
+                - Ticket Booked: {payment_details.seatCount}
+
+                Your ticket has been successfully booked, and we look forward to seeing you at the event.
+
+                If you have any questions, feel free to contact us.
+                - Link : "A"
+
+                Best regards,
+                Quicktix
+                """
+    )
+
+    try:
+        # Send email
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+            smtp.login(email_address, email_password)
+            smtp.send_message(msg)
+        return {
+                "message": "Payment successful and tickets updated",
+                "id": str(result.inserted_id),
+                "ticketsLeft": new_tickets_left,
+                "email_status": "Email successfully sent"
+            }
+    except Exception as e:
+        return f"Failed to send email: {str(e)}"
+
+
 @app.post("/reserve_tickets/")
 async def reserve_tickets(response: TicketRequest):
     time_str = response.queryResult["parameters"]["time"]
