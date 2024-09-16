@@ -22,15 +22,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Earnings Model and Collection
-@app.middleware("http")
-async def custom_middleware(request, call_next):
-    response = await call_next(request)
-    return response
 
 @app.get("/")
 def home():
     return {"message": "Hello World"}
+
+# Earnings Model and Collection
+
+@app.middleware("http")
+async def custom_middleware(request, call_next):
+    response = await call_next(request)
+    return response
 
 # Fetch earnings data dynamically from MongoDB
 @app.get("/earning", response_model=List[Earnings])
@@ -89,7 +91,6 @@ async def get_event(event_id: str = Query(..., alias="event_id")):
     return {
         "ticketsLeft": int(event.get("ticketsLeft", 0)),
     }
-
 
 @app.post("/ticket_booking/payment")
 async def update_payment(payment_details: PaymentDetails):
