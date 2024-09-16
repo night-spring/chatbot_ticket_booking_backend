@@ -7,8 +7,9 @@ import smtplib
 from email.message import EmailMessage
 from typing import List
 from database import tickets_collection, earnings_collection, profit_collection, shows_collections, payment_collection
-from model import Earnings, Tickets, ResolutionTime, Shows, PaymentDetails, TicketRequest, DialogflowRequest  
-#from insert import insert_initial_data
+from model import Earnings, Tickets, ResolutionTime, Shows, PaymentDetails, TicketRequest, DialogflowRequest
+
+# from insert import insert_initial_data
 # FastAPI app setup
 app = FastAPI()
 
@@ -16,23 +17,24 @@ app = FastAPI()
 # noinspection PyTypeChecker
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change to actual frontend URL if different
+    allow_origins=["http://localhost:3000"],  # Change to actual frontend URL if different
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-@app.get("/")
-def home():
-    return {"message": "Hello World"}
-
 # Earnings Model and Collection
-
 @app.middleware("http")
 async def custom_middleware(request, call_next):
     response = await call_next(request)
     return response
+
+
+@app.get("/")
+def home():
+    return {"message": "Hello World"}
+
 
 # Fetch earnings data dynamically from MongoDB
 @app.get("/earning", response_model=List[Earnings])
@@ -48,6 +50,7 @@ async def get_earning():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
+
 # Fetch ticket analytics data from MongoDB
 @app.get("/tickets-analytics", response_model=List[Tickets])
 async def get_ticket_analytics():
@@ -58,6 +61,7 @@ async def get_ticket_analytics():
         return tickets
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
 
 # Fetch resolution time data from MongoDB
 @app.get("/profit", response_model=List[ResolutionTime])
@@ -92,8 +96,14 @@ async def get_event(event_id: str = Query(..., alias="event_id")):
         "ticketsLeft": int(event.get("ticketsLeft", 0)),
     }
 
+
 @app.post("/ticket_booking/payment")
 async def update_payment(payment_details: PaymentDetails):
+    # Check if email already exists to avoid duplicate payments
+    existing_payment = await payment_collection.find_one({
+        "email": payment_details.email,
+    })
+
     # Simulate payment processing here (add real payment gateway logic)
     # For simplicity, let's assume the payment is successful
 
@@ -131,7 +141,7 @@ async def update_payment(payment_details: PaymentDetails):
     msg['From'] = email_address
     msg['To'] = payment_details.email
     msg.set_content(
-    f"""\
+        f"""\
                 Dear Customer,
 
                 Thank you for booking tickets for the show: {event['title']}.
@@ -158,11 +168,11 @@ async def update_payment(payment_details: PaymentDetails):
             smtp.login(email_address, email_password)
             smtp.send_message(msg)
         return {
-                "message": "Payment successful and tickets updated",
-                "id": str(result.inserted_id),
-                "ticketsLeft": new_tickets_left,
-                "email_status": "Email successfully sent"
-            }
+            "message": "Payment successful and tickets updated",
+            "id": str(result.inserted_id),
+            "ticketsLeft": new_tickets_left,
+            "email_status": "Email successfully sent"
+        }
     except Exception as e:
         return f"Failed to send email: {str(e)}"
 
@@ -193,12 +203,7 @@ async def reserve_tickets(response: TicketRequest):
     return {"fulfillmentText": f"Your {num_tickets} tickets are reserved for the {time_str} show."}
 
 
-
-
-
-
-
-#chatbot
+# chatbot
 
 
 def handle_hindi(body):
@@ -230,6 +235,7 @@ def handle_hindi(body):
     }
     return response
 
+
 def handle_hindi_ticket(body):
     response = {
         "fulfillmentMessages": [
@@ -237,81 +243,82 @@ def handle_hindi_ticket(body):
                 "payload": {
                     "richContent": [
                         [
-                        {
-                            "event": {
-                            "name": "ReserveTicketsHindi",
-                            "parameters": {
-                                "ticket_type": "प्रवेश"
-                            }
+                            {
+                                "event": {
+                                    "name": "ReserveTicketsHindi",
+                                    "parameters": {
+                                        "ticket_type": "प्रवेश"
+                                    }
+                                },
+                                "title": "प्रवेश",
+                                "subtitle": "संग्रहालय तक प्रवेश\n₹70",
+                                "type": "list"
                             },
-                            "title": "प्रवेश",
-                            "subtitle": "संग्रहालय तक प्रवेश\n₹70",
-                            "type": "list"
-                        },
-                        {
-                            "type": "divider"
-                        },
-                        {
-                            "event": {
-                            "parameters": {
-                                "ticket_type": "अनमोल धरोहर"
+                            {
+                                "type": "divider"
                             },
-                            "name": "ReserveTicketsHindi"
+                            {
+                                "event": {
+                                    "parameters": {
+                                        "ticket_type": "अनमोल धरोहर"
+                                    },
+                                    "name": "ReserveTicketsHindi"
+                                },
+                                "title": "अनमोल धरोहर",
+                                "subtitle": "ऐतिहासिक कलाकृतियों की प्रदर्शनी\n₹100",
+                                "type": "list"
                             },
-                            "title": "अनमोल धरोहर",
-                            "subtitle": "ऐतिहासिक कलाकृतियों की प्रदर्शनी\n₹100",
-                            "type": "list"
-                        },
-                        {
-                            "type": "divider"
-                        },
-                        {
-                            "type": "list",
-                            "subtitle": "विभिन्न युगों की कला का विकास\n₹120",
-                            "title": "युगों के माध्यम से कला",
-                            "event": {
-                            "name": "ReserveTicketsHindi",
-                            "parameters": {
-                                "ticket_type": "युगों के माध्यम से कला"
-                            }
-                            }
-                        },
-                        {
-                            "type": "divider"
-                        },
-                        {
-                            "subtitle": "अतीत की छुपी कहानियों को जानें\n₹150",
-                            "type": "list",
-                            "title": "अनकही कहानियाँ",
-                            "event": {
-                            "name": "ReserveTicketsHindi",
-                            "parameters": {
-                                "ticket_type": "अनकही कहानियाँ"
-                            }
-                            }
-                        },
-                        {
-                            "type": "divider"
-                        },
-                        {
-                            "subtitle": "आधुनिकता का प्रदर्शन\n₹100",
-                            "event": {
-                            "name": "ReserveTicketsHindi",
-                            "parameters": {
-                                "ticket_type": "आधुनिक माहिर"
-                            }
+                            {
+                                "type": "divider"
                             },
-                            "type": "list",
-                            "title": "आधुनिक माहिर"
-                        }
+                            {
+                                "type": "list",
+                                "subtitle": "विभिन्न युगों की कला का विकास\n₹120",
+                                "title": "युगों के माध्यम से कला",
+                                "event": {
+                                    "name": "ReserveTicketsHindi",
+                                    "parameters": {
+                                        "ticket_type": "युगों के माध्यम से कला"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "subtitle": "अतीत की छुपी कहानियों को जानें\n₹150",
+                                "type": "list",
+                                "title": "अनकही कहानियाँ",
+                                "event": {
+                                    "name": "ReserveTicketsHindi",
+                                    "parameters": {
+                                        "ticket_type": "अनकही कहानियाँ"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "divider"
+                            },
+                            {
+                                "subtitle": "आधुनिकता का प्रदर्शन\n₹100",
+                                "event": {
+                                    "name": "ReserveTicketsHindi",
+                                    "parameters": {
+                                        "ticket_type": "आधुनिक माहिर"
+                                    }
+                                },
+                                "type": "list",
+                                "title": "आधुनिक माहिर"
+                            }
                         ]
                     ]
-                    }
+                }
 
             }
         ]
     }
     return response
+
 
 def handle_marathi(body):
     response = {
@@ -341,6 +348,8 @@ def handle_marathi(body):
         ]
     }
     return response
+
+
 def handle_marathi_ticket(body):
     response = {
         "fulfillmentMessages": [
@@ -423,6 +432,7 @@ def handle_marathi_ticket(body):
     }
     return response
 
+
 def handle_bengali(body):
     response = {
         "fulfillmentMessages": [
@@ -451,6 +461,8 @@ def handle_bengali(body):
         ]
     }
     return response
+
+
 def handle_bengali_ticket(body):
     response = {
         "fulfillmentMessages": [
@@ -533,6 +545,7 @@ def handle_bengali_ticket(body):
     }
     return response
 
+
 def handle_tamil(body):
     response = {
         "fulfillmentMessages": [
@@ -561,6 +574,8 @@ def handle_tamil(body):
         ]
     }
     return response
+
+
 def handle_tamil_ticket(body):
     response = {
         "fulfillmentMessages": [
@@ -642,6 +657,7 @@ def handle_tamil_ticket(body):
         ]
     }
     return response
+
 
 def handle_telugu_ticket(body):
     response = {
@@ -725,6 +741,7 @@ def handle_telugu_ticket(body):
     }
     return response
 
+
 def handle_telugu(body):
     response = {
         "fulfillmentMessages": [
@@ -753,6 +770,8 @@ def handle_telugu(body):
         ]
     }
     return response
+
+
 def handle_reserve_tickets(body):
     parameters = body.get("queryResult", {}).get("parameters", {})
     ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
@@ -771,47 +790,48 @@ def handle_reserve_tickets(body):
             },
             {
                 "payload": {
-  "richContent": [
-    [
-      {
-        "options": [
-          {
-            "image": {
-              "src": {
-                "rawUrl": "https://imgur.com/fp0VcNM"
-              }
-            },
-            "text": "Google Pay",
-            "link": "https://example.com/googlepay"
-          },
-          {
-            "link": "https://example.com/phonepe.com",
-            "image": {
-              "src": {
-                "rawUrl": "https://s3.amazonaws.com/shecodesio-production/uploads/files/000/143/327/original/Create_Account.jpeg?1726258586"
-              }
-            },
-            "text": "PhonePe"
-          },
-          {
-            "link": "https://example.com/credit-card-payment",
-            "text": "Credit Card",
-            "image": {
-              "src": {
-                "rawUrl": " https://s3.amazonaws.com/shecodesio-production/uploads/files/000/143/328/original/Credit_cards_vector_icon.jpeg?1726258598"
-              }
-            }
-          }
-        ],
-        "type": "chips"
-      }
-    ]
-  ]
-}
+                    "richContent": [
+                        [
+                            {
+                                "options": [
+                                    {
+                                        "image": {
+                                            "src": {
+                                                "rawUrl": "https://imgur.com/fp0VcNM"
+                                            }
+                                        },
+                                        "text": "Google Pay",
+                                        "link": "https://example.com/googlepay"
+                                    },
+                                    {
+                                        "link": "https://example.com/phonepe.com",
+                                        "image": {
+                                            "src": {
+                                                "rawUrl": "https://s3.amazonaws.com/shecodesio-production/uploads/files/000/143/327/original/Create_Account.jpeg?1726258586"
+                                            }
+                                        },
+                                        "text": "PhonePe"
+                                    },
+                                    {
+                                        "link": "https://example.com/credit-card-payment",
+                                        "text": "Credit Card",
+                                        "image": {
+                                            "src": {
+                                                "rawUrl": " https://s3.amazonaws.com/shecodesio-production/uploads/files/000/143/328/original/Credit_cards_vector_icon.jpeg?1726258598"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "type": "chips"
+                            }
+                        ]
+                    ]
+                }
             }
         ]
     }
     return response
+
 
 def handle_text_tickets(body):
     parameters = body.get("queryResult", {}).get("parameters", {})
@@ -822,6 +842,7 @@ def handle_text_tickets(body):
     fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment: \n{payment_link}."
     response = {"fulfillmentText": fulfillment_text}
     return response
+
 
 def handle_default(body):
     response = {
@@ -835,17 +856,17 @@ def handle_default(body):
             },
             {
                 "payload": {
-                        "richContent": [
-                            [
+                    "richContent": [
+                        [
                             {
                                 "type": "chips",
                                 "options": [
-                                {
-                                    "text": "Available Tickets"
-                                },
-                                {
-                                    "text": "Language"
-                                }
+                                    {
+                                        "text": "Available Tickets"
+                                    },
+                                    {
+                                        "text": "Language"
+                                    }
                                 ]
                             }
                         ]
@@ -856,6 +877,7 @@ def handle_default(body):
     }
     return response
 
+
 # Map intent names to handler functions
 INTENT_HANDLERS = {
     "hindi": handle_hindi,
@@ -863,16 +885,17 @@ INTENT_HANDLERS = {
     "bengali": handle_bengali,
     "tamil": handle_tamil,
     "telugu": handle_telugu,
-    
+
     "ReserveTickets": handle_reserve_tickets,
     "Text_tickets": handle_text_tickets,
-    
+
     "LangHindi": handle_hindi_ticket,
     "LangMarathi": handle_marathi_ticket,
     "LangBengali": handle_bengali_ticket,
     "LangTamil": handle_tamil_ticket,
     "LangTelugu": handle_telugu_ticket,
 }
+
 
 @app.post("/webhook")
 async def webhook(request: Request):
