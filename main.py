@@ -94,7 +94,6 @@ async def get_event(event_id: str = Query(..., alias="event_id")):
 
 @app.post("/ticket_booking/payment")
 async def update_payment(payment_details: PaymentDetails):
-    
     # Simulate payment processing here (add real payment gateway logic)
     # For simplicity, let's assume the payment is successful
 
