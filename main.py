@@ -44,6 +44,7 @@ async def send_email(email_address: str, event: dict, payment_details: PaymentDe
         - Date: {event['date']}
         - Time: {event['time']}
         - Tickets Booked: {payment_details.seatCount}
+        - Price: {event['price_int']}
 
         Your ticket has been successfully booked, and we look forward to seeing you at the event.
 
