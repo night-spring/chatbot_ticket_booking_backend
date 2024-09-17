@@ -783,7 +783,8 @@ async def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
         id="66e561e683e976b3c870f802"
     else:
         id="66e561e483e976b3c870f7fe"
-    event_id = ObjectId(payment_details.eventId)
+    
+    event_id = ObjectId(PaymentDetails.eventId)
     event = await shows_collections.find_one({"_id": event_id})
     background_tasks.add_task(send_email, email, event, ticket)
     ticket_cost = event['price_int']
@@ -847,7 +848,7 @@ def handle_text_tickets(body):
     ticket = int(parameters.get("Ticket", 0))
     ticket_cost = 70
     total_cost = ticket * ticket_cost
-    payment_link = 'https://quicktix-chatbot.vercel.app'
+    payment_link = 'ticket-bot-one.vercel.app'
     fulfillment_text = f"Your total is ₹{total_cost},\n proceed for payment: \n{payment_link}."
     response = {"fulfillmentText": fulfillment_text}
     return response
