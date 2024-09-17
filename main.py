@@ -870,6 +870,9 @@ def faq(body):
     }
     return response
 
+def handle_default(body):
+    pass
+
 
 # Map intent names to handler functions
 INTENT_HANDLERS = {
@@ -897,7 +900,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         body = await request.json()
         intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
 
-        handler = INTENT_HANDLERS.get(intent_name)
+        handler = INTENT_HANDLERS.get(intent_name, handle_default)
         
         if handler == handle_reserve_tickets:
             response = await handle_reserve_tickets(body, background_tasks)
