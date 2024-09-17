@@ -2,7 +2,7 @@ from bson import ObjectId
 from datetime import datetime
 import pytz
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi import FastAPI, HTTPException, Query, Request, BackgroundTasks
 import smtplib
 from email.message import EmailMessage
 from typing import List
@@ -22,6 +22,52 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+async def send_email(email_address: str, event: dict, payment_details: PaymentDetails):
+    # Sender email and app-specific password
+    sender_email = "debojit94333@gmail.com"
+    email_password = "qabi jido ztsf waut"
+
+    # Create the email body
+    msg = EmailMessage()
+    msg['Subject'] = f"Ticket Booking Confirmation for {event['title']}"
+    msg['From'] = sender_email
+    msg['To'] = email_address
+    msg.set_content(
+        f"""\  
+        Dear Customer,
+
+        Thank you for booking tickets for the show: {event['title']}.
+
+        Here are the details of your booking:
+        - Show Name: {event['title']}
+        - Date: {event['date']}
+        - Time: {event['time']}
+        - Tickets Booked: {payment_details.seatCount}
+
+        Your ticket has been successfully booked, and we look forward to seeing you at the event.
+
+        If you have any questions, feel free to contact us.
+        - Link : {event.get('link', 'N/A')}
+
+        Best regards,
+        Quicktix
+        """
+    )
+
+    try:
+        # Send email
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+            smtp.login(sender_email, email_password)
+            smtp.send_message(msg)
+        return "Email successfully sent"
+    except Exception as e:
+        return f"Failed to send email: {str(e)}"
+# Earnings Model and Collection
+@app.middleware("http")
+async def custom_middleware(request, call_next):
+    response = await call_next(request)
+    return response
 
 
 # Earnings Model and Collection
@@ -96,13 +142,8 @@ async def get_event(event_id: str = Query(..., alias="event_id")):
         "ticketsLeft": int(event.get("ticketsLeft", 0)),
     }
 
-
 @app.post("/ticket_booking/payment")
-async def update_payment(payment_details: PaymentDetails):
-    # Check if email already exists to avoid duplicate payments
-    existing_payment = await payment_collection.find_one({
-        "email": payment_details.email,
-    })
+async def update_payment(payment_details: PaymentDetails, background_tasks: BackgroundTasks):
 
     # Simulate payment processing here (add real payment gateway logic)
     # For simplicity, let's assume the payment is successful
@@ -112,70 +153,33 @@ async def update_payment(payment_details: PaymentDetails):
     if not result.inserted_id:
         raise HTTPException(status_code=500, detail="Failed to save payment details")
 
-    # Update ticket count after successful payment
+    # Find the event by eventId
     event_id = ObjectId(payment_details.eventId)
     event = await shows_collections.find_one({"_id": event_id})
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
 
+    # Update the number of tickets left
     new_tickets_left = event.get("ticketsLeft", 0) - payment_details.seatCount
     if new_tickets_left < 0:
         raise HTTPException(status_code=400, detail="Not enough tickets left")
 
-    # Update the tickets left in the database
     update_result = await shows_collections.update_one(
         {"_id": event_id},
         {"$set": {"ticketsLeft": new_tickets_left}}
     )
-
     if update_result.modified_count == 0:
         raise HTTPException(status_code=500, detail="Failed to update tickets")
 
-    # Function to send email
-    email_address = "debojit94333@gmail.com"  # Your Gmail
-    email_password = "qabi jido ztsf waut"  # App-specific password
+    # Pass the event details to the send_email function using background tasks
+    background_tasks.add_task(send_email, payment_details.email, event, payment_details)
 
-    # Create the email body
-    msg = EmailMessage()
-    msg['Subject'] = f"Ticket Booking Confirmation for {event['title']}"
-    msg['From'] = email_address
-    msg['To'] = payment_details.email
-    msg.set_content(
-        f"""\
-                Dear Customer,
-
-                Thank you for booking tickets for the show: {event['title']}.
-
-                Here are the details of your booking:
-                - Show Name: {event['title']}
-                - Date: {event['date']}
-                - Time: {event['time']}
-                - Ticket Booked: {payment_details.seatCount}
-
-                Your ticket has been successfully booked, and we look forward to seeing you at the event.
-
-                If you have any questions, feel free to contact us.
-                - Link : "https://quicktix-chatbot.vercel.app"
-
-                Best regards,
-                Quicktix
-                """
-    )
-
-    try:
-        # Send email
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login(email_address, email_password)
-            smtp.send_message(msg)
-        return {
-            "message": "Payment successful and tickets updated",
-            "id": str(result.inserted_id),
-            "ticketsLeft": new_tickets_left,
-            "email_status": "Email successfully sent"
-        }
-    except Exception as e:
-        return f"Failed to send email: {str(e)}"
-
+    return {
+        "message": "Payment successful and tickets updated",
+        "id": str(result.inserted_id),
+        "ticketsLeft": new_tickets_left,
+        "email_status": "Email will be sent shortly"
+    }
 
 @app.post("/reserve_tickets/")
 async def reserve_tickets(response: TicketRequest):
