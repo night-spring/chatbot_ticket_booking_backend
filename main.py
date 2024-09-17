@@ -805,27 +805,27 @@ async def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
                                     {
                                         "image": {
                                             "src": {
-                                                "rawUrl": "https://imgur.com/fp0VcNM"
+                                                "rawUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyVO9LUWF81Ov6LZR50eDNu5rNFCpkn0LwYQ&s"
                                             }
                                         },
                                         "text": "Google Pay",
-                                        "link": "https://example.com/googlepay"
+                                        "link": "https://ticket-bot-one.vercel.app/"
                                     },
                                     {
-                                        "link": "https://example.com/phonepe.com",
+                                        "link": "https://ticket-bot-one.vercel.app/",
                                         "image": {
                                             "src": {
-                                                "rawUrl": "https://s3.amazonaws.com/shecodesio-production/uploads/files/000/143/327/original/Create_Account.jpeg?1726258586"
+                                                "rawUrl": "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/phonepe-icon.png"
                                             }
                                         },
                                         "text": "PhonePe"
                                     },
                                     {
-                                        "link": "https://example.com/credit-card-payment",
+                                        "link": "https://ticket-bot-one.vercel.app/",
                                         "text": "Credit Card",
                                         "image": {
                                             "src": {
-                                                "rawUrl": " https://s3.amazonaws.com/shecodesio-production/uploads/files/000/143/328/original/Credit_cards_vector_icon.jpeg?1726258598"
+                                                "rawUrl": "https://logowik.com/content/uploads/images/credit-card2790.jpg"
                                             }
                                         }
                                     }
