@@ -839,10 +839,28 @@ def handle_text_tickets(body):
     ticket_cost = 70
     total_cost = ticket * ticket_cost
     payment_link = 'placeholder'
-    fulfillment_text = f"Your total is ₹{total_cost}, proceed for payment: \n{payment_link}."
+    fulfillment_text = f"Your total is ₹{total_cost},\n proceed for payment: \n{payment_link}."
     response = {"fulfillmentText": fulfillment_text}
     return response
 
+def faq(body):
+
+    parameters = body.get("queryResult", {}).get("parameters", {})
+    faq = parameters.get("faq", "").lower()
+    faq_responses = {
+        "museum": "The museum is open from 9 AM to 5 PM every day except Sundays.",
+        "location": "We are located at 1234 Museum Street, Art City.",
+        "about": "Our museum houses a vast collection of art, history, and culture from around the world.",
+        "modern maestro": "The 'Modern Maestro' exhibit showcases contemporary artists redefining the art scene.\n  Entry ticket - ₹100 per person",
+        "stories untold": "'Stories Untold' delves into hidden narratives of underrepresented artists.\n  Entry ticket - ₹150 per person",
+        "art through the ages": "'Art Through the Ages' is a journey through art history, from ancient to modern times.\n  Entry ticket - ₹120 per person",
+        "timeless treasures": "'Timeless Treasures' features iconic pieces that have withstood the test of time.\n  Entry ticket - ₹100 per person"
+    }
+    response_text = faq_responses.get(faq, "I'm sorry, I don't have information on that topic.")
+    return {
+        "fulfillmentText": response_text
+    }
+    return response
 
 def handle_default(body):
     response = {
@@ -888,7 +906,8 @@ INTENT_HANDLERS = {
 
     "ReserveTickets": handle_reserve_tickets,
     "Text_tickets": handle_text_tickets,
-
+    "FAQ":faq,
+    
     "LangHindi": handle_hindi_ticket,
     "LangMarathi": handle_marathi_ticket,
     "LangBengali": handle_bengali_ticket,
