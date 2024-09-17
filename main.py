@@ -783,7 +783,7 @@ async def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
         id="66e561e683e976b3c870f802"
     else:
         id="66e561e483e976b3c870f7fe"
-    
+    result = await payment_collection.insert_one(payment_details.dict())
     event_id = ObjectId(PaymentDetails.eventId)
     event = await shows_collections.find_one({"_id": event_id})
     background_tasks.add_task(send_email, email, event, ticket)
@@ -935,7 +935,6 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         handler = INTENT_HANDLERS.get(intent_name, handle_default)
         
         if handler == handle_reserve_tickets:
-            #response ={"fulfillmentText": "testing"}
             response = await handle_reserve_tickets(body, background_tasks)
         else:
             response = handler(body)
