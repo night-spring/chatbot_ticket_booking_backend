@@ -769,7 +769,7 @@ def handle_telugu(body):
         ]
     }
     return response
-async def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
+def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
     parameters = body.get("queryResult", {}).get("parameters", {})
     ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
     email = parameters.get("email")
