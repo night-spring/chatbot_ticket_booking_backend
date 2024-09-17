@@ -927,16 +927,20 @@ INTENT_HANDLERS = {
 
 
 @app.post("/webhook")
-async def webhook(request: Request):
+async def webhook(request: Request, background_tasks: BackgroundTasks):
     try:
         body = await request.json()
         intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
 
         handler = INTENT_HANDLERS.get(intent_name, handle_default)
+        
+        # Check if the handler is `handle_reserve_tickets` and pass background_tasks
         if handler == handle_reserve_tickets:
             response = await handle_reserve_tickets(body, background_tasks)
         else:
-            response = handler(body)
+            # Await the handler if it's an async function
+            if callable(handler) and hasattr(handler, "__call__"):
+                response = await handler(body) if hasattr(handler, '__await__') else handler(body)
 
         return response
     except Exception as e:
