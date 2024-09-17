@@ -927,16 +927,22 @@ INTENT_HANDLERS = {
 
 @app.post("/webhook")
 async def webhook(request: Request, background_tasks: BackgroundTasks):
+    try:
+        body = await request.json()
+        intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
 
-    body = await request.json()
-    intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
+        handler = INTENT_HANDLERS.get(intent_name, handle_default)
+        
+        if handler == handle_reserve_tickets:
+            response ={"fulfillmentText": "testing"}
+            #response = await handle_reserve_tickets(body, background_tasks)
+        else:
+            response = handler(body)
 
-    handler = INTENT_HANDLERS.get(intent_name, handle_default)
-    
-    if handler == handle_reserve_tickets:
-        response = await handle_reserve_tickets(body, background_tasks)
-    else:
-        response = handler(body)
+        return response
 
-    return response
-
+    except Exception as e:
+        print(f"Error: {e}")
+        return {
+            "fulfillmentText": f"Webhook errorss: {str(e)}"
+        }
