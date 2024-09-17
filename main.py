@@ -23,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-async def send_email(email_address: str, event: dict, nfticket):
+async def send_email(email_address: str, event: dict, ticket):
     # Sender email and app-specific password
     sender_email = "debojit94333@gmail.com"
     email_password = "qabi jido ztsf waut"
@@ -43,7 +43,7 @@ async def send_email(email_address: str, event: dict, nfticket):
     - Show Name: {event['title']}
     - Date: {event['date']}
     - Time: {event['time']}
-    - Tickets Booked: {nfticket}
+    - Tickets Booked: {ticket}
 
     Your ticket has been successfully booked, and we look forward to seeing you at the event.
 
@@ -769,16 +769,24 @@ def handle_telugu(body):
         ]
     }
     return response
-
-
 def handle_reserve_tickets(body):
     parameters = body.get("queryResult", {}).get("parameters", {})
-    ticket_type=parameters.get("ticket_type")
     ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
     email = parameters.get("email")
     ticket_type = parameters.get("ticket_type")
-    #send_email(email, event, tickets) 
-    ticket_cost = 70
+    if ticket_type=="Timeless Treasures":
+        id="66e561e683e976b3c870f7ff"
+    elif ticket_type=="Art Through the Ages":
+        id="66e561e683e976b3c870f800"
+    elif ticket_type=="Stories Untold":
+        id="66e561e683e976b3c870f801"
+    elif ticket_type=="Modern Maestro":
+        id="66e561e683e976b3c870f802"
+    else:
+        id="66e561e483e976b3c870f7fe"
+    event = await shows_collections.find_one({"_id": id})
+    send_email(email, event, ticket) 
+    ticket_cost = event['price_int']
     total_cost = ticket * ticket_cost
     response = {
         "fulfillmentMessages": [
@@ -839,7 +847,7 @@ def handle_text_tickets(body):
     ticket = int(parameters.get("Ticket", 0))
     ticket_cost = 70
     total_cost = ticket * ticket_cost
-    payment_link = 'placeholder'
+    payment_link = 'https://quicktix-chatbot.vercel.app'
     fulfillment_text = f"Your total is ₹{total_cost},\n proceed for payment: \n{payment_link}."
     response = {"fulfillmentText": fulfillment_text}
     return response
