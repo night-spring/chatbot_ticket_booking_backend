@@ -929,11 +929,14 @@ INTENT_HANDLERS = {
 async def webhook(request: Request, background_tasks: BackgroundTasks):
     try:
         body = await request.json()
+        return {
+            "fulfillmentText": f"Background tasks: {background_tasks}"
+        }
         intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
 
         handler = INTENT_HANDLERS.get(intent_name, handle_default)
         
-        if handler == handle_reserve_tickets:   
+        if handler == handle_reserve_tickets:
             response = await handle_reserve_tickets(body, background_tasks)
         else:
             response = await handler(body)
@@ -945,4 +948,3 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         return {
             "fulfillmentText": f"Webhook error: {str(e)}"
         }
-        
