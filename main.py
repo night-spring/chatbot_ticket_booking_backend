@@ -783,7 +783,7 @@ async def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
         id="66e561e683e976b3c870f802"
     else:
         id="66e561e483e976b3c870f7fe"
-    event = await shows_collections.find_one({"_id": id})
+    event = await shows_collections.find_one({"id": id})
     background_tasks.add_task(send_email, email, event, ticket)
     ticket_cost = event['price_int']
     total_cost = ticket * ticket_cost
