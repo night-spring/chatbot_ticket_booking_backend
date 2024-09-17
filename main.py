@@ -772,8 +772,9 @@ def handle_telugu(body):
 async def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
     parameters = body.get("queryResult", {}).get("parameters", {})
     ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
-    email = parameters.get("email")
+    email = parameters.get("email").lower()
     ticket_type = parameters.get("ticket_type")
+    ticket_type="Timeless Treasures"
     if ticket_type=="Timeless Treasures":
         id="66e561e683e976b3c870f7ff"
     elif ticket_type=="Art Through the Ages":
@@ -784,9 +785,10 @@ async def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
         id="66e561e683e976b3c870f802"
     else:
         id="66e561e483e976b3c870f7fe"
-    print(email,ticket,ticket_type)
     event_id = ObjectId(payment_details.eventId)
     event = await shows_collections.find_one({"_id": event_id})
+    email="dearayush2@gmail.com"
+    ticket=1
     background_tasks.add_task(send_email,email, event, ticket)
     ticket_cost = event['price_int']
     total_cost = ticket * ticket_cost
