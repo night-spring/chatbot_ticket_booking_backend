@@ -936,7 +936,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         if handler == handle_reserve_tickets:   
             response = await handle_reserve_tickets(body, background_tasks)
         else:
-            response = async handler(body)
+            response = await handler(body)
 
         return response
 
