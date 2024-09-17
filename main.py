@@ -47,7 +47,7 @@ async def send_email(email_address: str, event: dict, ticket):
     Your ticket has been successfully booked, and we look forward to seeing you at the event.
 
     If you have any questions, feel free to contact us.
-    - Link : "https://quicktix-chatbot.vercel.app"
+    - Link : "https://ticket-bot-one.vercel.app"
 
     Best regards,
     Quicktix
