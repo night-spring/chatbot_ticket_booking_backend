@@ -12,7 +12,6 @@ from model import Earnings, Tickets, ResolutionTime, Shows, PaymentDetails, Tick
 # from insert import insert_initial_data
 # FastAPI app setup
 app = FastAPI()
-background_tasks = BackgroundTasks()
 # CORS setup to allow React frontend
 # noinspection PyTypeChecker
 app.add_middleware(
@@ -934,7 +933,8 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
 
         handler = INTENT_HANDLERS.get(intent_name, handle_default)
         
-        if handler == handle_reserve_tickets:
+        if handler == handle_reserve_tickets:   
+            background_tasks = BackgroundTasks()
             response = await handle_reserve_tickets(body, background_tasks)
         else:
             handler(body)
