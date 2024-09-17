@@ -793,7 +793,7 @@ def handle_reserve_tickets(body):
             {
                 "text": {
                     "text": [
-                        f"Your total is ₹{total_cost}, \nthe tickets will be mailed to you at {ticket_type}.\nProceed for payment:"
+                        f"Your total is ₹{total_cost}, \nthe tickets will be mailed to you at {email}.\nProceed for payment:"
                     ]
                 }
             },
