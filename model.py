@@ -34,6 +34,7 @@ class Shows(BaseModel):
     price: str
     ticketsLeft: int
     id: str
+    price_int: int
 
 
 class PaymentDetails(BaseModel):
