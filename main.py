@@ -23,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-async def send_email(email_address: str, event: dict, payment_details: PaymentDetails):
+async def send_email(email_address: str, event: dict, nfticket):
     # Sender email and app-specific password
     sender_email = "debojit94333@gmail.com"
     email_password = "qabi jido ztsf waut"
@@ -34,26 +34,25 @@ async def send_email(email_address: str, event: dict, payment_details: PaymentDe
     msg['From'] = sender_email
     msg['To'] = email_address
     msg.set_content(
-        f"""\  
-        Dear Customer,
+        f"""  
+    Dear Customer,
 
-        Thank you for booking tickets for the show: {event['title']}.
+    Thank you for booking tickets for the show: {event['title']}.
 
-        Here are the details of your booking:
-        - Show Name: {event['title']}
-        - Date: {event['date']}
-        - Time: {event['time']}
-        - Tickets Booked: {payment_details.seatCount}
-        - Price: {event['price_int']}
+    Here are the details of your booking:
+    - Show Name: {event['title']}
+    - Date: {event['date']}
+    - Time: {event['time']}
+    - Tickets Booked: {nfticket}
 
-        Your ticket has been successfully booked, and we look forward to seeing you at the event.
+    Your ticket has been successfully booked, and we look forward to seeing you at the event.
 
-        If you have any questions, feel free to contact us.
-        - Link : {event.get('link', 'N/A')}
+    If you have any questions, feel free to contact us.
+    - Link : "https://quicktix-chatbot.vercel.app"
 
-        Best regards,
-        Quicktix
-        """
+    Best regards,
+    Quicktix
+    """
     )
 
     try:
@@ -64,6 +63,7 @@ async def send_email(email_address: str, event: dict, payment_details: PaymentDe
         return "Email successfully sent"
     except Exception as e:
         return f"Failed to send email: {str(e)}"
+    
 # Earnings Model and Collection
 @app.middleware("http")
 async def custom_middleware(request, call_next):
@@ -165,9 +165,9 @@ async def update_payment(payment_details: PaymentDetails, background_tasks: Back
     )
     if update_result.modified_count == 0:
         raise HTTPException(status_code=500, detail="Failed to update tickets")
-
+    tickets=payment_details.seatCount
     # Pass the event details to the send_email function using background tasks
-    background_tasks.add_task(send_email, payment_details.email, event, payment_details)
+    background_tasks.add_task(send_email, payment_details.email, event,tickets)
 
     return {
         "message": "Payment successful and tickets updated",
@@ -773,10 +773,11 @@ def handle_telugu(body):
 
 def handle_reserve_tickets(body):
     parameters = body.get("queryResult", {}).get("parameters", {})
+    ticket_type=parameters.get("ticket_type")
     ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
     email = parameters.get("email")
     ticket_type = parameters.get("ticket_type")
-    
+    #send_email(email, event, tickets) 
     ticket_cost = 70
     total_cost = ticket * ticket_cost
     response = {
@@ -784,7 +785,7 @@ def handle_reserve_tickets(body):
             {
                 "text": {
                     "text": [
-                        f"Your total is ₹{total_cost}, \nthe tickets will be mailed to you at {email}.\nProceed for payment:"
+                        f"Your total is ₹{total_cost}, \nthe tickets will be mailed to you at {ticket_type}.\nProceed for payment:"
                     ]
                 }
             },
