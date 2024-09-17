@@ -786,7 +786,7 @@ def handle_reserve_tickets(body):
         id="66e561e483e976b3c870f7fe"
     event_id = ObjectId(payment_details.eventId)
     event = await shows_collections.find_one({"_id": event_id})
-    send_email(email, event, ticket) 
+    background_tasks.add_task(send_email,email, event, ticket)
     ticket_cost = event['price_int']
     total_cost = ticket * ticket_cost
     response = {
