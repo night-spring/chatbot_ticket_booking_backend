@@ -769,7 +769,7 @@ def handle_telugu(body):
         ]
     }
     return response
-def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
+async def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
     parameters = body.get("queryResult", {}).get("parameters", {})
     ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
     email = parameters.get("email")
@@ -784,6 +784,7 @@ def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
         id="66e561e683e976b3c870f802"
     else:
         id="66e561e483e976b3c870f7fe"
+    print(email,ticket,ticket_type)
     event_id = ObjectId(payment_details.eventId)
     event = await shows_collections.find_one({"_id": event_id})
     background_tasks.add_task(send_email,email, event, ticket)
