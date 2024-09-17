@@ -933,7 +933,7 @@ async def webhook(request: Request):
         intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
 
         handler = INTENT_HANDLERS.get(intent_name, handle_default)
-        if handler == "handle_reserve_tickets":
+        if handler == handle_reserve_tickets:
             response = await handle_reserve_tickets(body, background_tasks)
         else:
             response = handler(body)
