@@ -934,15 +934,16 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
 
         handler = INTENT_HANDLERS.get(intent_name, handle_default)
         
-        # Check if the handler is `handle_reserve_tickets` and pass background_tasks
+        # If the handler is `handle_reserve_tickets`, pass background_tasks
         if handler == handle_reserve_tickets:
             response = await handle_reserve_tickets(body, background_tasks)
         else:
             # Await the handler if it's an async function
-            if callable(handler) and hasattr(handler, "__call__"):
+            if callable(handler):
                 response = await handler(body) if hasattr(handler, '__await__') else handler(body)
 
         return response
+
     except Exception as e:
         # Log and return the error message
         print(f"Error: {e}")
