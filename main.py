@@ -870,39 +870,6 @@ def faq(body):
     }
     return response
 
-def handle_default(body):
-    response = {
-        "fulfillmentMessages": [
-            {
-                "text": {
-                    "text": [
-                        "I didn't understand."
-                    ]
-                }
-            },
-            {
-                "payload": {
-                    "richContent": [
-                        [
-                            {
-                                "type": "chips",
-                                "options": [
-                                    {
-                                        "text": "Available Tickets"
-                                    },
-                                    {
-                                        "text": "Language"
-                                    }
-                                ]
-                            }
-                        ]
-                    ]
-                }
-            }
-        ]
-    }
-    return response
-
 
 # Map intent names to handler functions
 INTENT_HANDLERS = {
@@ -930,7 +897,7 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         body = await request.json()
         intent_name = body.get("queryResult", {}).get("intent", {}).get("displayName")
 
-        handler = INTENT_HANDLERS.get(intent_name, handle_default)
+        handler = INTENT_HANDLERS.get(intent_name)
         
         if handler == handle_reserve_tickets:
             response = await handle_reserve_tickets(body, background_tasks)
