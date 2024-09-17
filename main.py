@@ -784,6 +784,7 @@ def handle_reserve_tickets(body):
         id="66e561e683e976b3c870f802"
     else:
         id="66e561e483e976b3c870f7fe"
+    event_id = ObjectId(payment_details.eventId)
     event = await shows_collections.find_one({"_id": id})
     send_email(email, event, ticket) 
     ticket_cost = event['price_int']
