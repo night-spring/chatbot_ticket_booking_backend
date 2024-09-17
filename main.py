@@ -946,5 +946,5 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
     except Exception as e:
         print(f"Error: {e}")
         return {
-            "fulfillmentText": f"Webhook error: {str(e)}"
+            "fulfillmentText": f"Webhook errorss: {str(e)}"
         }
