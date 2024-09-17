@@ -934,10 +934,9 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         handler = INTENT_HANDLERS.get(intent_name, handle_default)
         
         if handler == handle_reserve_tickets:   
-            background_tasks = BackgroundTasks()
             response = await handle_reserve_tickets(body, background_tasks)
         else:
-            handler(body)
+            response = async handler(body)
 
         return response
 
@@ -946,3 +945,4 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
         return {
             "fulfillmentText": f"Webhook error: {str(e)}"
         }
+        
