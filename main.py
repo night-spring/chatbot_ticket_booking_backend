@@ -12,7 +12,7 @@ from model import Earnings, Tickets, ResolutionTime, Shows, PaymentDetails, Tick
 # from insert import insert_initial_data
 # FastAPI app setup
 app = FastAPI()
-
+background_tasks = BackgroundTasks()
 # CORS setup to allow React frontend
 # noinspection PyTypeChecker
 app.add_middleware(
@@ -786,7 +786,7 @@ async def handle_reserve_tickets(body, background_tasks: BackgroundTasks):
         id="66e561e483e976b3c870f7fe"
     event_id = ObjectId(payment_details.eventId)
     event = await shows_collections.find_one({"_id": event_id})
-    #background_tasks.add_task(send_email, email, event, ticket)
+    background_tasks.add_task(send_email, email, event, ticket)
     ticket_cost = event['price_int']
     total_cost = ticket * ticket_cost
     response = {
