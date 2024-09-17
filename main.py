@@ -24,8 +24,8 @@ app.add_middleware(
 
 async def send_email(email_address: str, event: dict, ticket):
     # Sender email and app-specific password
-    sender_email = "debojit94333@gmail.com"
-    email_password = "qabi jido ztsf waut"
+    sender_email = "code.a.cola.01@gmail.com"
+    email_password = "qamm sgmn dgwu frgz"
 
     # Create the email body
     msg = EmailMessage()
