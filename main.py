@@ -131,7 +131,7 @@ async def update_payment(payment_details: PaymentDetails):
     if update_result.modified_count == 0:
         raise HTTPException(status_code=500, detail="Failed to update tickets")
 
-    # Function to send emai
+    # Function to send email
     email_address = "debojit94333@gmail.com"  # Your Gmail
     email_password = "qabi jido ztsf waut"  # App-specific password
 
@@ -155,7 +155,7 @@ async def update_payment(payment_details: PaymentDetails):
                 Your ticket has been successfully booked, and we look forward to seeing you at the event.
 
                 If you have any questions, feel free to contact us.
-                - Link : "A"
+                - Link : "https://quicktix-chatbot.vercel.app"
 
                 Best regards,
                 Quicktix
@@ -777,6 +777,7 @@ def handle_reserve_tickets(body):
     ticket = int(parameters.get("ticket", 0))  # Convert to int if necessary
     email = parameters.get("email")
     ticket_type = parameters.get("ticket_type")
+    
     ticket_cost = 70
     total_cost = ticket * ticket_cost
     response = {
